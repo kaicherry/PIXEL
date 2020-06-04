@@ -1,6 +1,15 @@
 
 package org.onebeartoe.web.enabled.pixel.controllers;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.stage.Screen;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -21,15 +30,15 @@ import javax.swing.Timer;
 public class WindowsLCD {
 
 GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-//static String NOT_FOUND = "/Users/kaicherry/pixelcade.png";
 static String NOT_FOUND = "";
 private static ImageIcon ii;
 private boolean addedScroller = false;
 private String basePath = "D:\\Arcade\\Pixelcade\\lcdmarquees";
 private String pixelHome = System.getProperty("user.dir") + "\\";  
 protected JFrame myFrame = new JFrame();
+protected BufferedImage bi = null;
 protected MarqueePanel marqueePanel;
-    
+
 {
     this.myFrame.setSize(1280, 390);
     this.myFrame.setType(Window.Type.UTILITY);
@@ -54,19 +63,14 @@ public GraphicsDevice[] connectedDevices() {
 }
 
 
-    void displayImage(String named, String system){
+    void displayImage(String named, String system) throws IOException {
         if(addedScroller) {
             myFrame.getContentPane().remove(marqueePanel);
             addedScroller = false;
     }
-
-    //basePath = new File(WindowsLCD.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent() + "/lcdmarquees/";
-    try {
-     basePath = pixelHome + "lcdmarquees/";
-     NOT_FOUND = basePath + "pixelcade.png";  //if not found, we'll show d:\arcade\pixelcade\lcdmarquees\pixelcade.png for example
-    } catch (URISyntaxException e) {
-            e.printStackTrace();
-        };
+        basePath = pixelHome + "lcdmarquees/";
+        NOT_FOUND = basePath + "pixelcade.png";  //if not found, we'll show d:\arcade\pixelcade\lcdmarquees\pixelcade.png for example
+        ;
     String marqueePath = NOT_FOUND;
     if(new File(String.format("%s%s.png",basePath,named)).exists()){
         marqueePath = String.format("%s%s.png",basePath,named);
@@ -74,10 +78,14 @@ public GraphicsDevice[] connectedDevices() {
         marqueePath = String.format("%sconsole/default-%s.png",basePath,system);
     }
 
-    ii = new ImageIcon(marqueePath);
-        JImage imageLabel = new JImage(marqueePath);
+  System.out.println(String.format("MARQPATH is:%s Requested: %s %s",marqueePath,named,system));
+        JLabel joe = new JLabel(new ImageIcon());
+        bi = ImageIO.read(new File(marqueePath));
+        bi = resize(bi, 390,1280);
+        ii = new ImageIcon(bi);
+        joe.setIcon(ii);
         myFrame.getContentPane().removeAll();
-        myFrame.add(imageLabel.p);
+        myFrame.add(joe);
         
         showOnScreen(1, myFrame);
     }
@@ -134,6 +142,15 @@ public GraphicsDevice[] connectedDevices() {
         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
     }
+
+    public BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
 }
 
 class MarqueePanel extends JPanel implements ActionListener {
@@ -183,94 +200,4 @@ class MarqueePanel extends JPanel implements ActionListener {
     }
 }
 
-class JImage{
-    BufferedImage bi = null;
-    MyJPanel p;
-    
- 
-    
-    JImage(String file){
-        try{
-            bi = ImageIO.read(new File(file));
-            BufferedImage rs = resize(bi, 390,1280); //new
-            bi = rs; //new
-            JFrame f = new JFrame();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            p = new MyJPanel();
-            p.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
-            f.add(p);
-            f.pack();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    private static BufferedImage resize(BufferedImage img, int height, int width) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-        return resized;
-    }
-    public BufferedImage getScaledInstance(BufferedImage img,
-                                           int targetWidth,
-                                           int targetHeight,
-                                           Object hint,
-                                           boolean higherQuality)
-    {
-        int type = (img.getTransparency() == Transparency.OPAQUE) ?
-                BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
-        BufferedImage ret = (BufferedImage)img;
-        int w, h;
-        if (higherQuality) {
-            // Use multi-step technique: start with original size, then
-            // scale down in multiple passes with drawImage()
-            // until the target size is reached
-            w = img.getWidth();
-            h = img.getHeight();
-        } else {
-            // Use one-step technique: scale directly from original
-            // size to target size with a single drawImage() call
-            w = targetWidth;
-            h = targetHeight;
-        }
 
-        do {
-            if (higherQuality && w > targetWidth) {
-                w /= 1.25;
-                if (w < targetWidth) {
-                    w = targetWidth;
-                }
-            }
-
-            if (higherQuality && h > targetHeight) {
-                h /= 2;
-                if (h < targetHeight) {
-                    h = targetHeight;
-                }
-            }
-
-            BufferedImage tmp = new BufferedImage(w, h, type);
-            Graphics2D g2 = tmp.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
-            //g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
-            g2.drawImage(ret, 0, 0, w, h, null);
-            g2.dispose();
-
-            ret = tmp;
-        } while (w != targetWidth || h != targetHeight);
-
-        return ret;
-    }
-
-    public static void main(String[] args){
-        new JImage(args[0]);
-    }
-    class MyJPanel extends JPanel{
-        @Override
-        public void paintComponent(Graphics g){
-            super.paintComponent(g);
-            g.drawImage(bi, 0, 0, this);
-        }
-    }
-}
