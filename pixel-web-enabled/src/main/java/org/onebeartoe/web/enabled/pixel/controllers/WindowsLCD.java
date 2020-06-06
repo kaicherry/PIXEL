@@ -39,6 +39,7 @@ public class WindowsLCD {
     private String pixelHome = System.getProperty("user.dir") + "\\";
     protected JFrame myFrame = new JFrame();
     final JFrame vidFrame = new JFrame();
+    final JFrame marqueeFrame = new JFrame();
     protected BufferedImage bi = null;
     protected MarqueePanel marqueePanel;
     protected JFXPanel VFXPanel = new JFXPanel();
@@ -58,6 +59,13 @@ public class WindowsLCD {
         this.vidFrame.setBackground(Color.black);
         this.vidFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.vidFrame.setUndecorated(true);
+
+        this.marqueeFrame.setSize(1280, 390);
+        this.marqueeFrame.setType(Window.Type.UTILITY);
+        this.marqueeFrame.setBackground(Color.black);
+        this.marqueeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.marqueeFrame.setUndecorated(true);
+
         VFXPanel.setBackground(Color.BLACK);
     }
 
@@ -72,7 +80,13 @@ public class WindowsLCD {
     }
     void scrollText(String message, Font font, Color color, int speed) {
         marqueePanel = new MarqueePanel(message,speed,color);
-        myFrame.getContentPane().add(marqueePanel);
+
+        marqueePanel.setSize(marqueeFrame.getWidth(),marqueeFrame.getHeight());
+        marqueePanel.start();
+        marqueeFrame.getContentPane().removeAll();
+        marqueeFrame.add(marqueePanel);
+
+        showOnScreen(1,marqueeFrame);
         addedScroller = true;
     }
 
@@ -95,7 +109,8 @@ public class WindowsLCD {
         System.out.println(String.format("MARQPATH is:%s Requested: %s %s",marqueePath,named,system));
         if(marqueePath.equals(NOT_FOUND)){
             System.out.println("DEFAULT_SWAP_VIDEO");
-            getVideo(String.format("%s/lcdvideo/pixelcade.mp4",basePath));
+            scrollText("Welcome to Pixelcade",new Font("Helvetica", Font.PLAIN, 144), Color.BLUE, 100);
+            //getVideo(String.format("%s/lcdvideo/pixelcade.mp4",basePath));
             return;
         }
         JLabel joe = new JLabel(new ImageIcon());
@@ -214,12 +229,12 @@ public class WindowsLCD {
 
 class MarqueePanel extends JPanel implements ActionListener {
 
-    private static final int RATE = 12;
+    private   int RATE = 20;
     private final Timer timer = new Timer(1000 / RATE, this);
     private final JLabel label = new JLabel();
     private final String s;
     private final int n;
-    Font font = new Font("Serif", Font.ITALIC, 144);
+    Font font = new Font("Helvetica", Font.ITALIC, 288);
     private int index;
 
     public MarqueePanel(String s, int n, Color color) {
@@ -232,16 +247,21 @@ class MarqueePanel extends JPanel implements ActionListener {
         }
         this.s = sb + s + sb;
         this.n = n;
+        this.setBackground(Color.BLACK);
         label.setFont(font);
+        System.out.println(String.format("Scrolling: %s\n",s));
         //label.setFont(new Font("Serif", Font.ITALIC, 144));
         label.setText(sb.toString());
         label.setForeground(color);
         label.setBackground(Color.BLACK);
         label.setVisible(true);
+        System.out.println(String.format("Set Attributes for:%s\n",s));
         this.add(label);
+        System.out.println(String.format("Added label\n"));
     }
 
     public void start() {
+        System.out.println(String.format("Scrolling Started\n"));
         timer.start();
     }
 
