@@ -188,17 +188,16 @@ public class Pixel
         
     private StreamGIFTask streamgifTask = new StreamGIFTask();
     private ScrollTextTask scollTextTask = new ScrollTextTask();
-    private DrawAnalogClockTask clockTask = new DrawAnalogClockTask();
     private PNGLoopTask pngLoopTask = new PNGLoopTask();
     
     private  ScheduledFuture<?> future ;
     private  ScheduledFuture<?> futurescroll ;
-    private  ScheduledFuture<?> futureclock ;
+    //private  ScheduledFuture<?> futureclock ;
     private  ScheduledFuture<?> futureimage ;
     
     private final AtomicBoolean streamGIFTimerRunningFlag = new AtomicBoolean();
     private final AtomicBoolean scrollingTextTimerRunningFlag = new AtomicBoolean();
-    private final AtomicBoolean clockTimerRunningFlag = new AtomicBoolean();
+    //private final AtomicBoolean clockTimerRunningFlag = new AtomicBoolean();
     private final AtomicBoolean PNGTimerRunningFlag = new AtomicBoolean();
     
     public Queue<String> PixelQueue = new LinkedList<>(); 
@@ -254,7 +253,7 @@ public class Pixel
                 String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
                 String decodedPath = URLDecoder.decode(path, "UTF-8");
                 pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
-               
+                pixelHome = "/Users/al/Documents/pixel/pixel/pixel-web-enabled/temp/";
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
                 imagesPath = pixelHome + "images/";
@@ -2480,27 +2479,7 @@ private static String checksum(String filepath, MessageDigest md) throws IOExcep
                         logMe.aLogger.severe("Could not write " + selectedFileName);
 		}
     }
-    
-    /**
-     * Currently only analog clock mode is supported
-     * @param mode 
-     */
-    public void displayClock(ClockModes mode)
-    {
-        //long oneSecond = Duration.ofSeconds(1).toMillis();
-        
-        //TimerTask drawTask = new DrawAnalogClockTask();
-                
-        //runRepeatingTask(drawTask, oneSecond);
-        
-         //let's move this to new timer architecture and skip repeating task
-        
-        ScheduledExecutorService clockService = Executors.newScheduledThreadPool(1);
-        futureclock = clockService.scheduleAtFixedRate(clockTask, 0, 1, TimeUnit.SECONDS);
-        clockTimerRunningFlag.set(true);  //atomic boolean , better for threads
-        
-       
-    }
+   
 
     public void drawEqualizer(double [] values) throws ConnectionLostException
     {
@@ -2733,11 +2712,6 @@ private static String checksum(String filepath, MessageDigest md) throws IOExcep
                 //drawktask.shutdown();    //looks like this is not needed
                 scrollingTextTimerRunningFlag.set(false);
                 futurescroll.cancel(true); //dont' interrupt if busy
-            }
-
-             if (clockTimerRunningFlag.get() == true) {
-                clockTimerRunningFlag.set(false);
-                futureclock.cancel(true); //dont' interrupt if busy
             }
              
             if (PNGTimerRunningFlag.get() == true) {
@@ -3393,75 +3367,7 @@ private static String checksum(String filepath, MessageDigest md) throws IOExcep
 	    //frame_[i] = (short) (((short) 0xFFFFFFFF & 0xFF) | (((short) (short) 0xFFFFFFFF & 0xFF) << 8));  //all white
 	}
     }
-
-
-    
-    public enum ClockModes
-    {
-        ANALOG,
-        DIGITAL,
-        TIX
-    }
-    
-//TODO: can this class be moved outside of the Pixel.java class; just like the Edu clock task?     
-    //private class DrawAnalogClockTask extends TimerTask
-    private class DrawAnalogClockTask implements Runnable 
-            
-    {
-        private EduAnalogClock clock;
-//        private AnalogClock clock;
-
-        final int OFFSCREEN_IMAGE_WIDTH = 401;
-        final int OFFSCREEN_IMAGE_HEIGHT = 401;
-        
-
-                 
-        public DrawAnalogClockTask()
-        {
-            clock = new EduAnalogClock(OFFSCREEN_IMAGE_WIDTH, OFFSCREEN_IMAGE_HEIGHT);
-
-            clock.init();
-        }
-                
-        @Override
-        public void run()
-        {	    
-            int w = OFFSCREEN_IMAGE_WIDTH;
-            int h = OFFSCREEN_IMAGE_HEIGHT;
-
-            BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-
-            Graphics2D g2d = img.createGraphics();
-            
-            System.out.println("paintng clock");
-            clock.paint(g2d);
-            System.out.println("clock painted");
-//TODO: keep this around, just in case            
-            g2d.dispose();
-
-// uncomment this to see how often the pixel is communicated with the host            
-//            System.out.print(".");
-
-            if(matrix == null)
-            {
-// uncomment this for debugging
-//                logger.log(Level.INFO, "Analog clock has no matrix.");
-            }
-            else
-            {
-                try 
-                {  
-                    System.out.println("writing clock");
-                    writeImagetoMatrix(img, KIND.width, KIND.height);
-                    System.out.println("clock written");
-                } 
-                catch (ConnectionLostException ex) 
-                {
-                    logger.log(Level.SEVERE, null, ex);
-                }                
-            }
-        }
-    }
+ 
     
 //TODO: Did this not exist before?
     public enum PixelModes

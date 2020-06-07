@@ -49,7 +49,7 @@ import org.onebeartoe.web.enabled.pixel.controllers.AnimationsHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.AnimationsListHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.ArcadeHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.ArcadeListHttpHandler;
-import org.onebeartoe.web.enabled.pixel.controllers.ClockHttpHandler;
+//import org.onebeartoe.web.enabled.pixel.controllers.ClockHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.ConsoleHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.IndexHttpHandler;
 import org.onebeartoe.web.enabled.pixel.controllers.LCDPixelcade;
@@ -608,7 +608,7 @@ public class WebEnabledPixel {
             
             HttpHandler uploadOriginHttpHandler = new UploadOriginHttpHandler( (UploadHttpHandler) uploadHttpHandler);
             
-            HttpHandler clockHttpHandler = new ClockHttpHandler(this);
+           // HttpHandler clockHttpHandler = new ClockHttpHandler(this);
             
             HttpHandler arcadeHttpHandler = new ArcadeHttpHandler(this);
             
@@ -654,7 +654,7 @@ public class WebEnabledPixel {
                                             server.createContext("/uploadplatform", uploadPlatformHttpHandler);
                                             server.createContext("/upload/origin", uploadOriginHttpHandler);
             
-            HttpContext clockContext =      server.createContext("/clock", clockHttpHandler);
+           // HttpContext clockContext =      server.createContext("/clock", clockHttpHandler);
             
             HttpContext randomContext =      server.createContext("/random", randomModeHttpHandler);
                                             
