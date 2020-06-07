@@ -3,13 +3,13 @@ package org.onebeartoe.web.enabled.pixel.controllers;
 import com.sun.net.httpserver.HttpExchange;
 import ioio.lib.api.exception.ConnectionLostException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+//import java.io.UnsupportedEncodingException;
+//import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+//import java.net.URLDecoder;
+//import java.net.URLEncoder;
+//import java.nio.charset.StandardCharsets;
+//import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.onebeartoe.network.TextHttpHandler;
@@ -44,28 +44,7 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
     {        
         String imageClassPath;
         
-        
-         //thought i might need to do this but turns out not
-        //String encoding = "UTF-8";
-        //exchange.getResponseHeaders().set("Content-Type", "text/html"); 
-        //exchange.getRequestURI().set("Content-Type", "text/html; charset=" + encoding);
-        //url is http://localhost:8080/arcade/stream/nes/marios brows.&l=0
-        
-        //String encoding = "UTF-8";
-        //exchange.getResponseHeaders().set("Content-Type", "text/html; charset=" + encoding);
-        
-        //String encodedValue = "Hell%C3%B6%20W%C3%B6rld%40Java";
-
-        // Decoding the URL encoded string
-      
-        
-        //logMe.aLogger.info("RAW PATHA: " + exchange.getResponseBody()); 
-        //System.out.println("RAW PATHA: " + exchange.getResponseBody());
-        //logMe.aLogger.info("RAW PATHB: " + exchange.getRequestURI()); 
-        //System.out.println("RAW PATHB: " + exchange.getRequestURI());
-        //System.out.println("RAW PATHC: " + exchange.getLocalAddress());
-        
-        
+       
         try
         {
             URI requestURI = exchange.getRequestURI();

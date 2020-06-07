@@ -46,16 +46,17 @@
         <dependency>
             <groupId>com.sparetimelabs</groupId>
             <artifactId>purejavacomm</artifactId>
-           <!-- <version>0.0.22</version> -->
-            <!-- <version>1.0.1</version> -->
-           <version>1.0.1</version>
+           <!-- <version>0.0.22</version>  -->
+            <!-- <version>1.0.1</version> most recent version -->
+           <version>1.0.3</version>
         </dependency>
         
         <dependency>
 		   <groupId>com.fazecast</groupId>
 		   <artifactId>jSerialComm</artifactId>
                    <!-- <version>2.6.1</version> -->
-		    <version>[2.0.0,3.0.0)</version> 
+                    <version>[2.0.0,3.0.0)</version>
+		    <!-- <version>[2.0.0,3.0.0)</version>  current version -->
 		</dependency>
        
    

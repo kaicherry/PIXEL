@@ -19,8 +19,8 @@ public class StillImageListHttpHandler extends ListHttpHandler
     @Override
     protected List<String> getList()
     {
-        List<String> images = application.loadImageLists();
+        List<String> alu = application.loadImageLists();  //was images before
 
-        return images;
+        return alu;
     }
 }

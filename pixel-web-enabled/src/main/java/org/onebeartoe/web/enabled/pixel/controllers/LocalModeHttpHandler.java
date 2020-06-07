@@ -2,30 +2,18 @@
 package org.onebeartoe.web.enabled.pixel.controllers;
 
 import ioio.lib.api.exception.ConnectionLostException;
-import ioio.lib.util.IOIOLooper;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.onebeartoe.pixel.hardware.Pixel;
-import org.onebeartoe.system.Sleeper;
 import org.onebeartoe.web.enabled.pixel.WebEnabledPixel;
 import org.onebeartoe.pixel.LogMe;
-import org.onebeartoe.pixel.PixelLogFormatter;
 import org.onebeartoe.web.enabled.pixel.CliPixel;
-import static org.onebeartoe.web.enabled.pixel.WebEnabledPixel.logMe;
 
 /**
  * @author Roberto Marquez
@@ -37,7 +25,7 @@ public class LocalModeHttpHandler extends ImageResourceHttpHandler
         super(application);
         
         basePath = "";
-        defaultImageClassPath = "pacman.png"; //to do change this
+        defaultImageClassPath = "tron.png"; //to do change this
         modeName = "arcade"; //to do change this to localplayback and fix
       
     }
@@ -80,17 +68,12 @@ public class LocalModeHttpHandler extends ImageResourceHttpHandler
                 switch (param.getName()) {
                     
                     case "l": //how many times to loop
-                        //loop_ = Integer.valueOf(param.getValue());
-                      
                         loop_ = 1; //we dont' loop for localplayback and just need something other than 0 to add this to the Q
                          //System.out.println("local mode loop: " + loop_);
                         break;
                     case "loop": //loop
-                        //loop_ = Integer.valueOf(param.getValue());
-                       
                         loop_ = 1;
                         //System.out.println("local mode loop: " + loop_);
-                       
                         break;
                 }
             }

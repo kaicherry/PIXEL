@@ -133,7 +133,6 @@ public class SerialPortIOIOConnectionBootstrap implements
 
 	static Collection<String> getExplicitPorts() {
             List<String> result = new LinkedList<String>();
-            
             //let's look in settings.ini for the port 
              File file = new File("settings.ini");
              if (file.exists() && !file.isDirectory()) { 

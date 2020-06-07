@@ -3,17 +3,9 @@ package org.onebeartoe.web.enabled.pixel.controllers;
 
 import com.sun.net.httpserver.HttpExchange;
 import java.awt.Color;
-
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import static java.util.regex.Pattern.compile;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.onebeartoe.network.TextHttpHandler;
@@ -50,7 +42,7 @@ public class ScrollingTextHttpHander extends TextHttpHandler  //TO DO have TextH
         Long speed = null;
         String loop_ = null;
         int loop = 0;
-        int scrollsmooth_ = 1;
+        int scrollsmooth_ = 0;
         Long speeddelay_ = 10L;
         int fontSize_ = 0;
         int yOffset_ = 0;

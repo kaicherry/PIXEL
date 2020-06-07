@@ -71,7 +71,7 @@ public class ArcadeHttpHandler extends ImageResourceHttpHandler {
     boolean saveAnimation = false;
     int loop_ = 0;
     String text_ = "";
-    int scrollsmooth_ = 1;
+    int scrollsmooth_ = 0;
     Long speeddelay_ = Long.valueOf(10L);
     String speed_ = null;
     Long speed = null;

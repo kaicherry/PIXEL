@@ -2,25 +2,22 @@
 package org.onebeartoe.web.enabled.pixel.controllers;
 
 import ioio.lib.api.exception.ConnectionLostException;
-import java.awt.Color;
+//import java.awt.Color;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+//import javax.imageio.ImageIO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.onebeartoe.pixel.LogMe;
 import org.onebeartoe.pixel.hardware.Pixel;
-import org.onebeartoe.system.Sleeper;
+//import org.onebeartoe.system.Sleeper;
 import org.onebeartoe.web.enabled.pixel.CliPixel;
 import org.onebeartoe.web.enabled.pixel.WebEnabledPixel;
 

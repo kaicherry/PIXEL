@@ -5,11 +5,11 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
+//import java.net.URI;
 import org.onebeartoe.network.TextHttpHandler;
 import org.onebeartoe.pixel.LogMe;
-import org.onebeartoe.pixel.hardware.Pixel;
-import org.onebeartoe.web.enabled.pixel.CliPixel;
+//import org.onebeartoe.pixel.hardware.Pixel;
+//import org.onebeartoe.web.enabled.pixel.CliPixel;
 import org.onebeartoe.web.enabled.pixel.WebEnabledPixel;
 
 /**

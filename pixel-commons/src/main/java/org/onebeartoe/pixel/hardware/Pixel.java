@@ -185,26 +185,6 @@ public class Pixel
     private Font font;
 
     private Font customFont;
-    
-//    private int w = 128; 
-//    
-//    private int h = 32;       
-//    
-//    private BufferedImage textImg;
-//    
-//    private Graphics2D g2d;
-//    
-//    private Font font;
-//    
-//    private Font customFont;
-//    
-//    private GraphicsEnvironment ge;
-//    
-//     private int messageWidth;
-//    
-//    private int yText;
-//    
-//    private FontMetrics fm;
         
     private StreamGIFTask streamgifTask = new StreamGIFTask();
     private ScrollTextTask scollTextTask = new ScrollTextTask();
@@ -236,8 +216,6 @@ public class Pixel
     private Boolean loop99999FlagGIF = false;
     private Boolean loop99999FlagText = false;
     
-   
-    
     //private TimerTask animateTimer = new AnimateTimer();
     
     /**
@@ -251,26 +229,6 @@ public class Pixel
         logger = Logger.getLogger(name);
         
         logMe = LogMe.getInstance();
-        
-        //PixelQueue = new LinkedList<>(); 
-        
-        /* String name = getClass().getName();
-        logger = Logger.getLogger(name);
-        logger.setUseParentHandlers(false);
-        
-        // define the logfile
-        FileHandler fh = null;
-        try {
-            fh = new FileHandler("pixelcade.log");
-        } catch (IOException ex) {
-            Logger.getLogger(Pixel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(Pixel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter);
-        */
         
         mode = PixelModes.STILL_IMAGE;
         
@@ -290,41 +248,18 @@ public class Pixel
         
         try
         {
-            //userHome = System.getProperty("user.home");
-            //userHome = System.getProperty("user.dir"); //this isn't working if user not launched from current dir
-            
-            //String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-            //String decodedPath = URLDecoder.decode(path, "UTF-8"); //path/pixelweb.jar , so we need just the path
-            
-            //String pixelwebHomePath = FilenameUtils.getFullPath(decodedPath);
-            
-            //userHome = pixelwebHomePath;
-
-            //pixelHome = userHome + "/pixelcade/";
-            
-            if (isWindows()) {
-                //pixelHome = userHome + "\\";
-                pixelHome = System.getProperty("user.dir") + "\\";  //user dir is the folder where pixelweb.jar lives and would be placed there by the windows installer
-                animationsPath = pixelHome + "animations\\";            
-                decodedAnimationsPath = animationsPath + "decoded\\";
-                imagesPath = pixelHome + "images\\";
-                scrollingTextMultiplier = 3; //to do this may no longer be needed
-            } 
-            else {
-                //pixelHome = userHome + "/";                 
-                pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+                             
+                //pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+                
+                String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+                String decodedPath = URLDecoder.decode(path, "UTF-8");
+                pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
+               
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
                 imagesPath = pixelHome + "images/";
-            }
             
             //logger.info("Home Directory: " + pixelHome);  
-            
-            //pixelHome = userHome + "/";
-            //animationsPath = pixelHome + "animations/";            
-            //decodedAnimationsPath = animationsPath + "decoded/";
-            //imagesPath = pixelHome + "images/";
-            
         }
         catch(Exception e)
         {
@@ -3568,78 +3503,6 @@ private static String checksum(String filepath, MessageDigest md) throws IOExcep
             //TODO UPDATE THE BROWSER/CLIENTS SOMEHOW
         
     }
-    
-    /**
-     * When this task is executed, it sends an animated GIF to the the Pixel.
-     */
-    /*
-     // had this as a timer originally but as it only needs to loop through all the frames one time with no delay, we don't actually need it to be a timer
-    class SendGifAnimationTask extends TimerTask   //this timer ends after one loop through the GIF but doesn't need to be a timer
-    
-    {
-        @Override
-        public void run()
-        {
-            String message = "Pixel is writing an animation to the hardware.";
-            System.out.println(message);
-            
-            //let's loop through and send frame to PIXEL with no delay
-            for(int y=0; y<GIFnumFrames; y++) 
-            { 
-                //Al removed the -1, make sure to test that!!!!!
-                sendPixelDecodedFrame(decodedAnimationsPath, animationFilename, y, GIFnumFrames, GIFresolution, KIND.width,KIND.height);
-            }
-
-            message = "Pixel is done writing the animation, setting PIXEL to local playback mode.";
-            System.out.println(message);
-            
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Pixel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            playLocalMode();
-            
-            message = "Pixel is in local playback mode.";
-            System.out.println(message);  
-                        
-            //TODO UPDATE THE BROWSER/CLIENTS SOMEHOW
-        }
-    }
-    */
-    
-    /*  class StreamGifAnimationTask extends TimerTask  //**** NO LONGER USED ****
-    {
-        @Override
-        public void run()
-        {
-            
-           
-            String message = "timer instance loop";
-            //System.out.println(message);
-            System.out.println(message);
-            
-            //let's loop through and send frame to PIXEL with no delay
-            for(int y=0; y<GIFnumFrames-1; y++) 
-            { 
-                //Al removed the -1, make sure to test that!!!!!
-                sendPixelDecodedFrame(decodedAnimationsPath, animationFilename, y, GIFnumFrames, GIFresolution, KIND.width,KIND.height);
-                System.out.println("counter : " + y);
-            }
-            
-            //!!!!! if the cancel is happening in the middle of the for loop, we're in trouble
-            
-            //try {
-            //    Thread.sleep(100);
-            //} catch (InterruptedException ex) {
-            //    Logger.getLogger(Pixel.class.getName()).log(Level.SEVERE, null, ex);
-            // }
-        }
-    } */
-         
-     
-    
      
      public class StreamGIFTask implements Runnable {
 
@@ -3906,322 +3769,6 @@ private static String checksum(String filepath, MessageDigest md) throws IOExcep
         
          
     }
-    
-     /* public String getConsoleNamefromMapping(String originalConsoleName)
-    {
-         String consoleNameMapped = null; //to do set this if null?
-         
-         originalConsoleName = originalConsoleName.toLowerCase();
-         //add the popular ones first to save time
-          
-         switch (originalConsoleName) {
-            
-            
-            case "atari-2600":
-                 consoleNameMapped = "atari2600";
-                 return consoleNameMapped;
-             case "mame-libretro":
-                 consoleNameMapped = "mame";
-                 return consoleNameMapped;
-            case "mame-mame4all":
-                consoleNameMapped = "mame";
-                 return consoleNameMapped;
-            case "arcade":
-                consoleNameMapped = "mame";
-                 return consoleNameMapped;
-            case "mame-advmame":
-                consoleNameMapped = "neogeo";
-                 return consoleNameMapped;
-            case "atari 2600":
-                consoleNameMapped = "atari2600";
-                return consoleNameMapped;
-            case "nintendo entertainment system":
-                consoleNameMapped = "nes";
-                return consoleNameMapped;
-            case "nintendo 64":
-                consoleNameMapped = "n64";
-                return consoleNameMapped;
-            case "sony playstation":
-                 consoleNameMapped = "psx";
-                 return consoleNameMapped;
-            case "sony playstation 2":
-                consoleNameMapped = "ps2";
-                 return consoleNameMapped;
-            case "sony pocketstation":
-                consoleNameMapped = "psp";
-                 return consoleNameMapped;
-            case "sony psp":
-                consoleNameMapped = "psp";
-                 return consoleNameMapped;
-            case "amstrad cpc":
-                consoleNameMapped = "amstradcpc";
-                 return consoleNameMapped;
-            case "amstrad gx4000":
-                consoleNameMapped = "amstradcpc";
-                 return consoleNameMapped;
-            case "apple II":
-                consoleNameMapped = "apple2";
-                 return consoleNameMapped;
-            case "atari 5200":
-                consoleNameMapped = "atari5200";
-                 return consoleNameMapped;
-            case "atari 7800":
-                consoleNameMapped = "atari7800";
-                 return consoleNameMapped;
-            case "atari jaguar":
-                consoleNameMapped = "atarijaguar";
-                 return consoleNameMapped;
-            case "atari jaguar cd":
-                consoleNameMapped = "atarijaguar";
-                 return consoleNameMapped;
-            case "atari lynx":
-                consoleNameMapped = "atarilynx";
-                 return consoleNameMapped;
-            case "bandai super vision 8000":
-                consoleNameMapped = "wonderswan";
-                 return consoleNameMapped;
-            case "bandai wonderswan":
-                consoleNameMapped = "wonderswan";
-                 return consoleNameMapped;
-            case "bandai wonderswan color":
-                consoleNameMapped = "wonderswancolor";
-                 return consoleNameMapped;
-            case "capcom classics":
-                consoleNameMapped = "capcom";
-                 return consoleNameMapped;
-            case "capcom play pystem":
-                consoleNameMapped = "capcom";
-                 return consoleNameMapped;
-            case "capcom play system II":
-                consoleNameMapped = "capcom";
-                 return consoleNameMapped;
-            case "capcom play system III":
-                consoleNameMapped = "capcom";
-                 return consoleNameMapped;
-            case "colecovision":
-                consoleNameMapped = "coleco";
-                 return consoleNameMapped;
-            case "commodore 128":
-                consoleNameMapped = "c64";
-                 return consoleNameMapped;
-            case "commodore 16 & plus4":
-                consoleNameMapped = "c64";
-                 return consoleNameMapped;
-            case "commodore 64":
-                consoleNameMapped = "c64";
-                 return consoleNameMapped;
-            case "commodore amiga":
-                consoleNameMapped = "amiga";
-                 return consoleNameMapped;
-            case "commodore amiga cd32":
-                consoleNameMapped = "amiga";
-                 return consoleNameMapped;
-            case "commodore vic-20":
-                consoleNameMapped = "c64";
-                 return consoleNameMapped;
-            case "final burn alpha":
-                consoleNameMapped = "fba";
-                 return consoleNameMapped;
-            case "future pinball":
-                consoleNameMapped = "futurepinball";
-                 return consoleNameMapped;
-            case "gce vectrex":
-                consoleNameMapped = "vectrex";
-                 return consoleNameMapped;
-            case "magnavox odyssey":
-                consoleNameMapped = "odyssey";
-                 return consoleNameMapped;
-            case "magnavox odyssey 2":
-                consoleNameMapped = "odyssey";
-                 return consoleNameMapped;
-            case "mattel intellivision":
-                consoleNameMapped = "intellivision";
-                 return consoleNameMapped;
-            case "microsoft msx":
-                consoleNameMapped = "msx";
-                 return consoleNameMapped;
-            case "microsoft msx2":
-                consoleNameMapped = "msx";
-                 return consoleNameMapped;
-            case "microsoft msx2+":
-                consoleNameMapped = "msx";
-                 return consoleNameMapped;
-            case "microsoft windows 3.x":
-                consoleNameMapped = "pc";
-                 return consoleNameMapped;
-            case "misfit mame":
-                consoleNameMapped = "mame";
-                 return consoleNameMapped;
-            case "nec pc engine":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec pc engine-cd":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec pc-8801":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec pc-9801":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec pc-fx":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec supergrafx":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec turbografx-16":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nec turbografx-cd":
-                consoleNameMapped = "pcengine";
-                 return consoleNameMapped;
-            case "nintendo 64dd":
-                consoleNameMapped = "n64";
-                 return consoleNameMapped;
-            case "nintendo famicom":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo famicom disk system":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo game boy":
-                consoleNameMapped = "gb";
-                 return consoleNameMapped;
-            case "nintendo game boy advance":
-                consoleNameMapped = "gba";
-                 return consoleNameMapped;
-            case "nintendo game boy color":
-                consoleNameMapped = "gbc";
-                 return consoleNameMapped;
-            case "nintendo gamecube":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo pokemon mini":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo satellaview":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo super famicom":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo super game boy":
-                consoleNameMapped = "gba";
-                 return consoleNameMapped;
-            case "nintendo virtual boy":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo wii":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo wii u":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "nintendo wiiware":
-                consoleNameMapped = "nes";
-                 return consoleNameMapped;
-            case "panasonic 3do":
-                consoleNameMapped = "3do";
-                 return consoleNameMapped;
-            case "pc games":
-                consoleNameMapped = "pc";
-                 return consoleNameMapped;
-            case "pinball fx2":
-                consoleNameMapped = "futurepinball";
-                 return consoleNameMapped;
-            case "sega 32x":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega cd":
-                consoleNameMapped = "segacd";
-                 return consoleNameMapped;
-            case "sega classics":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega dreamcast":
-                consoleNameMapped = "dreamcast";
-                 return consoleNameMapped;
-            case "sega game gear":
-                consoleNameMapped = "gamegear";
-                 return consoleNameMapped;
-            case "sega genesis":
-                consoleNameMapped = "genesis";
-                 return consoleNameMapped;
-            case "sega hikaru":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega master system":
-                consoleNameMapped = "mastersystem";
-                 return consoleNameMapped;
-            case "sega model 2":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega model 3":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega naomi":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega pico":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega saturn":
-                consoleNameMapped = "saturn";
-                 return consoleNameMapped;
-            case "sega sc-3000":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega sg-1000":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega st-v":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega triforce":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sega vmu":
-                consoleNameMapped = "sega32x";
-                 return consoleNameMapped;
-            case "sinclair zx spectrum":
-                consoleNameMapped = "zxspectrum";
-                 return consoleNameMapped;
-            case "sinclair zx81":
-                consoleNameMapped = "zxspectrum";
-                 return consoleNameMapped;
-            case "snk classics":
-                consoleNameMapped = "neogeo";
-                 return consoleNameMapped;
-            case "snk neo geo aes":
-                consoleNameMapped = "neogeo";
-                 return consoleNameMapped;
-            case "snk neo geo cd":
-                consoleNameMapped = "neogeo";
-                 return consoleNameMapped;
-            case "snk neo geo mvs":
-                consoleNameMapped = "neogeo";
-                 return consoleNameMapped;
-            case "snk neo geo pocket":
-                consoleNameMapped = "ngp";
-                 return consoleNameMapped;
-            case "snk neo geo pocket color":
-                consoleNameMapped = "ngpc";
-                 return consoleNameMapped;
-            case "sony psp minis":
-                consoleNameMapped = "psp";
-                 return consoleNameMapped;
-            case "super nintendo entertainment system":
-                consoleNameMapped = "snes";
-                 return consoleNameMapped;
-            case "visual pinball":
-                consoleNameMapped = "visualpinball";
-                 return consoleNameMapped;
-            default: 
-                 consoleNameMapped = originalConsoleName;    //we didn't find a match so just return the name you got
-                 return consoleNameMapped;
-        }
-    }*/
     
     private Color getColor (String colorText) {  //no longer used
            

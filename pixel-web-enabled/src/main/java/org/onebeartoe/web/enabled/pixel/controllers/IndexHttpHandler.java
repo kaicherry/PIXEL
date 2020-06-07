@@ -5,8 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.onebeartoe.network.TextHttpHandler;
+import org.onebeartoe.network.TextHttpHandler; //this is a maven dependency is is compiled with java 1.8
 
 /**
  *
@@ -17,21 +16,12 @@ public class IndexHttpHandler extends TextHttpHandler
     @Override
     protected String getHttpText(HttpExchange t)
     {
-        InetAddress localhost = null; 
-        try {
-            localhost = InetAddress.getLocalHost();
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(IndexHttpHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-       // InetAddress inetAddress = InetAddress.getLocalHost();
-       // System.out.println("IP Address:- " + localhost.getHostAddress());
-       // System.out.println("Host Name:- " + localhost.getHostName());
-       // System.out.println("Address:- " + localhost.getAddress());
-       // System.out.println("C Host Name:- " + localhost.getCanonicalHostName());
-       
-       
-        //String response = "Pixelcade Arcade Marquee and Pinball Display\n\nBrowse artwork from any computer on the same Wi-Fi network from this URL:\n\nhttp://" + localhost.getHostAddress().trim() + ":8080/files/index.html";
+//        InetAddress localhost = null; //giving an error on rockchip
+//        try {
+//            localhost = InetAddress.getLocalHost();
+//        } catch (UnknownHostException ex) {
+//            Logger.getLogger(IndexHttpHandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         //TODO: Pull the HTML document from a static file in the distribution JAR        
         String response = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +

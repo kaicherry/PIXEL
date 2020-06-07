@@ -9,7 +9,6 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import org.apache.commons.io.FilenameUtils;
 import org.onebeartoe.pixel.LogMe;
 import org.onebeartoe.pixel.hardware.Pixel;
@@ -25,8 +24,8 @@ public class StillImageHttpHandler extends ImageResourceHttpHandler
     {
         super(application);
         
-        basePath = "images/";
-        defaultImageClassPath = basePath + "pacman.png";
+        basePath = "alu/";
+        defaultImageClassPath = basePath + "tron.png";
         modeName = "still";
     }
     
@@ -52,14 +51,11 @@ public class StillImageHttpHandler extends ImageResourceHttpHandler
         String path = "";
         boolean saveAnimation = false;  //TO DO: get the save working here
         BufferedImage image;
-        
-        //imageClassPath will be either images/1942.png or /still/save/1942.png
-        
         String arcadeName = FilenameUtils.getName(imageClassPath); //get the name only WITH extension
-        String ext = FilenameUtils.getExtension(imageClassPath); //get the extension, we want to know if PNG or GIF   
-            
-        //path = application.getPixel().getPixelHome() + imageClassPath; //home/pixelcade/images/1941.gif so full path
-        path = application.getPixel().getPixelHome() + "images/" + arcadeName; //to do need to regression test this
+        String ext = FilenameUtils.getExtension(imageClassPath); //get the extension, we want to know if PNG or GIF 
+      
+        //path = application.getPixel().getPixelHome() + "images/" + arcadeName; //to do need to regression test this
+        path = application.getPixel().getPixelHome() + "alu/" + arcadeName; //to do need to regression test this
         File targetFilePath = new File(path);
         url = targetFilePath.toURI().toURL();
         
@@ -67,9 +63,9 @@ public class StillImageHttpHandler extends ImageResourceHttpHandler
           
         //now let's find out if PNG or GIF
         
-        System.out.println("arcadeNameOnly: " + arcadeName);
-        System.out.println("ext: " + ext);
-        System.out.println("path to file: " + path);
+//        System.out.println("arcadeNameOnly: " + arcadeName);
+//        System.out.println("ext: " + ext);
+//        System.out.println("path to file: " + path);
         
         if (ext.equals("gif")) {
             
@@ -82,7 +78,7 @@ public class StillImageHttpHandler extends ImageResourceHttpHandler
 
                 Pixel pixel = application.getPixel();
                 
-                pixel.writeArcadeAnimation("images",arcadeName,saveAnimation,0, WebEnabledPixel.pixelConnected); //since this class handles pngs and gifs that are served up, we won't have a loop here so pass 0
+                pixel.writeArcadeAnimation("alu",arcadeName,saveAnimation,0, WebEnabledPixel.pixelConnected); //since this class handles pngs and gifs that are served up, we won't have a loop here so pass 0
                     } catch (NoSuchAlgorithmException ex) {
                         Logger.getLogger(StillImageHttpHandler.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -92,47 +88,7 @@ public class StillImageHttpHandler extends ImageResourceHttpHandler
             Pixel pixel = application.getPixel();
             pixel.writeArcadeImage(targetFilePath, saveAnimation, 0,"","",WebEnabledPixel.pixelConnected); //since this class handles pngs and gifs that are served up, we won't have a loop and won't need the console and png names
             
-            /*
-             
-             image = ImageIO.read(url);
-        
-            if (!CliPixel.getSilentMode()) {
-                    System.out.println("buffered image created for: " + url.toString());
-                    logMe.aLogger.info("buffered image created for: " + url.toString());
-            }
-            
-            //to do : we need to move this to pixel.java 
-            
-            //Pixel pixel = application.getPixel();
-            pixel.stopExistingTimer( null, null, null, null, null, null);  //a timer could be running from a gif so we need to kill it here
-        
-            //if (saveAnimation && pixel.getPIXELHardwareID().substring(0,4).equals("PIXL")) {
-            if (saveAnimation) {
-            
-                pixel.interactiveMode();
-                pixel.writeMode(10);
-
-                 try {
-                       pixel.writeImagetoMatrix(image, pixel.KIND.width, pixel.KIND.height);
-                } catch (ConnectionLostException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                } 
-
-                try {
-                    Thread.sleep(100); //this may not be needed but was causing a problem on the writes for the gif animations so adding here to be safe
-                    //TO DO will a smaller delay still work too?
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ArcadeHttpHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                 pixel.playLocalMode();
-            
-            } else {
-
-                pixel.interactiveMode();
-                pixel.writeImagetoMatrix(image, pixel.KIND.width, pixel.KIND.height); //to do add save parameter here
-            }   */ 
+           
         } 
         else {
             
