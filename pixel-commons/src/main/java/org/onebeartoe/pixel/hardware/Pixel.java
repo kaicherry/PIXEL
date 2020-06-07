@@ -253,7 +253,7 @@ public class Pixel
                 String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
                 String decodedPath = URLDecoder.decode(path, "UTF-8");
                 pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
-                pixelHome = "/Users/al/Documents/pixel/pixel/pixel-web-enabled/temp/";
+                pixelHome = "/upgrade/pixelcade";
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
                 imagesPath = pixelHome + "images/";

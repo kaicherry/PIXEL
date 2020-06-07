@@ -141,6 +141,11 @@ public class SerialPortIOIOConnectionBootstrap implements
                    ini = new Ini(new File(Pixel.getHomePath() + "settings.ini"));  //uses the ini4j lib
                 } catch (IOException ex) {
                    Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex);
+                   try {
+                       ini = new Ini(new File("/upgrade/pixelcade/settings.ini"));
+                   } catch (IOException ex1) {
+                       Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex1);
+                   }
                 }
                 //only go here if settings.ini exists
                 port_ = ini.get("PIXELCADE SETTINGS", "port");  
