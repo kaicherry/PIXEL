@@ -248,12 +248,12 @@ public class Pixel
         try
         {
                              
-                pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+                //pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
                 
-// this doesn't work with Graal VM
-//                String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-//                String decodedPath = URLDecoder.decode(path, "UTF-8");
-//                pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
+                // note this doesn't work with Graal VM
+                String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath(); //get the path that pixelweb.jar is launched from 
+                String decodedPath = URLDecoder.decode(path, "UTF-8");
+                pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
                 
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
