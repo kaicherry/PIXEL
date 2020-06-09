@@ -248,12 +248,13 @@ public class Pixel
         try
         {
                              
-                //pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+                pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
                 
-                String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-                String decodedPath = URLDecoder.decode(path, "UTF-8");
-                pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
-                pixelHome = "/upgrade/pixelcade";
+// this doesn't work with Graal VM
+//                String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+//                String decodedPath = URLDecoder.decode(path, "UTF-8");
+//                pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
+                
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
                 imagesPath = pixelHome + "images/";
@@ -506,6 +507,10 @@ public class Pixel
     
     public static String getHomePath() {
         return pixelHome;
+    }
+    
+    public void setHomePath(String homePath) { //kind of a hack, pixelhome is reference througout the code, to do fix this later
+        pixelHome = homePath;
     }
     
     public String getDecodedAnimationsPath()

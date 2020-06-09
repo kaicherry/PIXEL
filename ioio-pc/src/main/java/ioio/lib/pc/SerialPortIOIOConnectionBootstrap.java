@@ -135,21 +135,22 @@ public class SerialPortIOIOConnectionBootstrap implements
             List<String> result = new LinkedList<String>();
             //let's look in settings.ini for the port 
              File file = new File("settings.ini");
+             //boolean forcePort = true;
+             //if (forcePort) { 
              if (file.exists() && !file.isDirectory()) { 
                Ini ini = null;
                 try {
-                   ini = new Ini(new File(Pixel.getHomePath() + "settings.ini"));  //uses the ini4j lib
+                    //ini = new Ini(new File(Pixel.getHomePath() + "settings.ini"));  //uses the ini4j lib
+                    ini = new Ini(new File("settings.ini"));
                 } catch (IOException ex) {
-                   Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex);
-                   try {
-                       ini = new Ini(new File("/upgrade/pixelcade/settings.ini"));
-                   } catch (IOException ex1) {
-                       Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex1);
-                   }
+                    Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 //only go here if settings.ini exists
                 port_ = ini.get("PIXELCADE SETTINGS", "port");  
                 ledResolution_=ini.get("PIXELCADE SETTINGS", "ledResolution"); 
+                //port_ = "/dev/IOIO0";
+                //port_ = "/dev/tty.usbmodem14201";
+                //ledResolution_ = "128x32";
                 settingsINIExists = true; 
 
                  if (port_.equals("COM99")) {  //COM99 is the default so this means the user has not specified the port in settings.ini

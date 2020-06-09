@@ -191,6 +191,7 @@ public class WebEnabledPixel {
     } 
     
     File file = new File("settings.ini");
+    
     if (file.exists() && !file.isDirectory()) {
       Ini ini = null;
       try {
@@ -408,6 +409,15 @@ public class WebEnabledPixel {
       } 
     } 
     
+   //hard coding here since we don't have settings.ini 
+//     textColor_ = "random";
+//     textSpeed_ = "fast";
+//     ledResolution_ = "128x32";
+//     lcdMarquee_ = "no";
+//     SubDisplayAccessory_ = "no";
+//     playLastSavedMarqueeOnStartup_ = "no";
+//     LED_MATRIX_ID = 15;
+
     pixelEnvironment = new PixelEnvironment(LED_MATRIX_ID);
     MATRIX_TYPE = pixelEnvironment.LED_MATRIX;
     pixel = new Pixel(pixelEnvironment.LED_MATRIX, pixelEnvironment.currentResolution);

@@ -1,12 +1,1 @@
 INFO:Pixelcade Listener (pixelweb) Version 2.8.2
-INFO:PIXEL resolution found in settings.ini: resolution=128x32
-INFO:Pixelcade HOME DIRECTORY: /Users/al/Documents/pixel/pixel/pixel-web-enabled/temp/
-INFO:PIXEL port found in settings.ini: port=/dev/tty.usbmodem14201
-INFO:No Items in the Queue at Startup...
-INFO:Found PIXEL: ioio.lib.impl.RgbLedMatrixImpl@3d1e7a37
-You may now interact with PIXEL!
-LED matrix type is: 15
-PIXEL Status: Connected
-INFO:loading new classpath URL for still: alu/Asteroids (USA).png
-INFO:URL for still loaded
-INFO:PNG image found: file:/Users/al/Documents/pixel/pixel/pixel-web-enabled/temp/alu/Asteroids%20(USA).png
