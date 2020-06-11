@@ -205,9 +205,9 @@ public class WebEnabledPixel {
           LogMe.aLogger.severe("Could not open settings.ini" + ex); 
       } 
       Profile.Section sec = (Profile.Section)ini.get("PIXELCADE SETTINGS");
-      this.ledResolution_ = (String)sec.get("ledResolution");
+            ledResolution_ = (String)sec.get("ledResolution");
       if (sec.containsKey("playLastSavedMarqueeOnStartup")) {
-        this.playLastSavedMarqueeOnStartup_ = (String)sec.get("playLastSavedMarqueeOnStartup");
+            playLastSavedMarqueeOnStartup_ = (String)sec.get("playLastSavedMarqueeOnStartup");
       } else {
         System.out.println("Creating key in settings.ini : playLastSavedMarqueeOnStartup");
         sec.add("playLastSavedMarqueeOnStartup", "yes");

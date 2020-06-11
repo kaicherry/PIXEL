@@ -255,6 +255,7 @@ public class Pixel
                 String decodedPath = URLDecoder.decode(path, "UTF-8");
                 pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
                 
+                //pixelHome = "/upgrade/pixecade";
                 animationsPath = pixelHome + "animations/";            
                 decodedAnimationsPath = animationsPath + "decoded/";
                 imagesPath = pixelHome + "images/";

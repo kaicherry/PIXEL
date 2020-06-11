@@ -96,12 +96,7 @@
         </dependency>
         -->
         
-      <!-- https://mvnrepository.com/artifact/gradle.plugin.org.beryx/badass-runtime-plugin -->
-     <dependency>
-        <groupId>gradle.plugin.org.beryx</groupId>
-        <artifactId>badass-runtime-plugin</artifactId>
-        <version>1.8.0</version>
-    </dependency>
+    
       
         
         <dependency>
