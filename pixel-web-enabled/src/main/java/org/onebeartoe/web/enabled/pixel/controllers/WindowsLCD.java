@@ -79,7 +79,7 @@ public class WindowsLCD {
 
     }
     void scrollText(String message, Font font, Color color, int speed) {
-        marqueePanel = new MarqueePanel(message,speed,color);
+        marqueePanel = new MarqueePanel(message,speed,color,font);
 
         marqueePanel.setSize(marqueeFrame.getWidth(),marqueeFrame.getHeight());
         marqueePanel.start();
@@ -109,8 +109,8 @@ public class WindowsLCD {
         System.out.println(String.format("MARQPATH is:%s Requested: %s %s",marqueePath,named,system));
         if(marqueePath.equals(NOT_FOUND)){
             System.out.println("DEFAULT_SWAP_VIDEO");
-            scrollText("Welcome to Pixelcade",new Font("Helvetica", Font.PLAIN, 144), Color.BLUE, 100);
-            //getVideo(String.format("%s/lcdvideo/pixelcade.mp4",basePath));
+            //scrollText("Welcome to Pixelcade",new Font("Helvetica", Font.PLAIN, 144), Color.BLUE, 100);
+            getVideo(String.format("%s/lcdvideo/pixelcade.mp4",basePath));
             return;
         }
         JLabel joe = new JLabel(new ImageIcon());
@@ -237,7 +237,7 @@ class MarqueePanel extends JPanel implements ActionListener {
     Font font = new Font("Helvetica", Font.ITALIC, 288);
     private int index;
 
-    public MarqueePanel(String s, int n, Color color) {
+    public MarqueePanel(String s, int n, Color color, Font font) {
         if (s == null || n < 1) {
             throw new IllegalArgumentException("Null string or n < 1");
         }
@@ -247,8 +247,9 @@ class MarqueePanel extends JPanel implements ActionListener {
         }
         this.s = sb + s + sb;
         this.n = n;
+        this.font = new Font(font.getFontName(),font.getStyle(),288);
         this.setBackground(Color.BLACK);
-        label.setFont(font);
+        label.setFont(this.font);
         System.out.println(String.format("Scrolling: %s\n",s));
         //label.setFont(new Font("Serif", Font.ITALIC, 144));
         label.setText(sb.toString());
