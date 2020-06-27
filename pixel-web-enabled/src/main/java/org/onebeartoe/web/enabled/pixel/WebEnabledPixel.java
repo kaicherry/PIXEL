@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -67,7 +68,7 @@ import org.onebeartoe.web.enabled.pixel.controllers.RebootHttpHandler;
 
 
 public class WebEnabledPixel {
-  public static String pixelwebVersion = "2.9.0";
+  public static String pixelwebVersion = "2.9.1";
   
   public static LogMe logMe = null;
   
@@ -167,6 +168,8 @@ public class WebEnabledPixel {
   
   public static LCDPixelcade lcdDisplay = null;
   
+  private boolean isALU = System.getenv().containsValue("pixelcade/jre11/bin/java");
+  
   public WebEnabledPixel(String[] args) throws FileNotFoundException, IOException {
       
     this.cli = new CliPixel(args);
@@ -181,6 +184,9 @@ public class WebEnabledPixel {
       System.out.println("Pixelcade Listener (pixelweb) Version " + pixelwebVersion);
     } 
     
+    //Map<String, String> map = System.getenv();
+    //map.entrySet().forEach(System.out::println);
+    
     defaultyTextOffset = this.cli.getyTextOffset();
     LED_MATRIX_ID = this.cli.getLEDMatrixType();
     
@@ -193,10 +199,10 @@ public class WebEnabledPixel {
     if (isWindows()) {
           pixelHome = System.getProperty("user.dir") + "\\";  //user dir is the folder where pixelweb.jar lives and would be placed there by the windows installer
     } else {       
-          pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
-//          String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath(); //get the path that pixelweb.jar is launched from 
-//          String decodedPath = URLDecoder.decode(path, "UTF-8");
-//          pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
+          //pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+          String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath(); //get the path that pixelweb.jar is launched from 
+          String decodedPath = URLDecoder.decode(path, "UTF-8");
+          pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
     }
     
     File file = new File("settings.ini");
@@ -466,7 +472,7 @@ if (lcdMarquee_.equals("yes") && lcdDisplay != null) {
     pixel.setScrollTextColor(Color.red);
     
     if (!silentMode_)
-      LogMe.aLogger.info("Pixelcade HOME DIRECTORY: " + pixel.getPixelHome()); 
+      LogMe.aLogger.info("Pixelcade HOME DIRECTORY: " + pixelHome); 
     //extractDefaultContent();  //saving space by removing this as the retropie installer now includes all these files so no need to include here and make the .jar bigger
     
     createControllers();
@@ -1015,7 +1021,7 @@ if (lcdMarquee_.equals("yes") && lcdDisplay != null) {
   }
   
   private List<String> loadImageList(String directoryName) throws Exception {
-    String dirPath = pixel.getPixelHome() + directoryName;
+    String dirPath = pixelHome + directoryName;
     File parent = new File(dirPath);
     List<String> namesList = new ArrayList<>();
     if (!parent.exists() || !parent.isDirectory()) {

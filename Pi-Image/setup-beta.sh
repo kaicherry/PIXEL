@@ -227,15 +227,16 @@ if [ "$lcd_marquee" = true ] ; then
   echo "${yellow}Downloading LCD Marquee artwork, this will take awhile...${white}"
   cd $HOME/pixelcade
   git clone https://github.com/alinke/lcdmarquees.git
+  cd $HOME/pixelcade/lcdmarquees
   git config user.email "sample@sample.com"
   git config user.name "sample"
 fi
 
-if [ "$retropie" = true ] ; then  #skip if no retropie as we'll start this later using systemd
-    cd $HOME/pixelcade
-    #./pixelweb -b & #run pixelweb in the background\
-    java -jar pixelweb.jar -b &
-fi
+#if [ "$retropie" = true ] ; then  #skip if no retropie as we'll start this later using systemd
+#    cd $HOME/pixelcade
+#    #./pixelweb -b & #run pixelweb in the background\
+#    ./pixelweb -b &
+#fi
 
 cd $HOME
 #if retropie is present, add our mods
@@ -291,6 +292,13 @@ if [ "$auto_update" = true ] ; then #add git pull to startup
     fi
 fi
 
+if cat /boot/cmdline.txt | grep -q 'vt.global_cursor_default=0'; then
+   echo "${yellow}Blinking cursor already disabled, skipping...${white}"
+else
+  echo "${yellow}Disabling blinking cursor...${white}"
+  sed -i "1 s|$| vt.global_cursor_default=0|" "/boot/cmdline.txt" #add this text at the end of the first line
+fi
+
 if [ "$retropie" = true ] ; then
     # let's check if autostart.sh already has pixelcade added and if so, we don't want to add it twice
     #cd /opt/retropie/configs/all/
@@ -299,11 +307,11 @@ if [ "$retropie" = true ] ; then
     else
       echo "${yellow}Adding Pixelcade /opt/retropie/configs/all/autostart.sh...${white}"
       #sudo sed -i '/^emulationstation.*/i cd $HOME/pixelcade && ./pixelweb -b &' /opt/retropie/configs/all/autostart.sh #insert this line before emulationstation #auto
-      sudo sed -i '/^emulationstation.*/i cd $HOME/pixelcade && java -jar pixelweb.jar -b &' /opt/retropie/configs/all/autostart.sh #insert this line before emulationstation #auto
+      sudo sed -i '/^emulationstation.*/i cd $HOME/pixelcade && ./pixelweb -b &' /opt/retropie/configs/all/autostart.sh #insert this line before emulationstation #auto
       sudo sed -i '/^emulationstation.*/i sleep 10 && cd $HOME/pixelcade/system && ./pixelcade-startup.sh' /opt/retropie/configs/all/autostart.sh #insert this line before emulationstation #auto
       if [ "$attractmode" = true ] ; then
           echo "${yellow}Adding Pixelcade for Attract Mode to /opt/retropie/configs/all/autostart.sh...${white}"
-          sudo sed -i '/^attract.*/i cd $HOME/pixelcade && java -jar pixelweb.jar -b &' /opt/retropie/configs/all/autostart.sh #insert this line before attract #auto
+          sudo sed -i '/^attract.*/i cd $HOME/pixelcade && ./pixelweb -b &' /opt/retropie/configs/all/autostart.sh #insert this line before attract #auto
           #sudo sed -i '/^attract.*/i cd $HOME/pixelcade && ./pixelweb -b &' /opt/retropie/configs/all/autostart.sh #insert this line before attract #auto
           sudo sed -i '/^attract.*/i sleep 10 && cd $HOME/pixelcade/system && ./pixelcade-startup.sh' /opt/retropie/configs/all/autostart.sh #insert this line before attract #auto
       fi
@@ -314,6 +322,7 @@ if [ "$retropie" = true ] ; then
     sudo cp $HOME/pixelcade/fonts/*.ttf /$HOME/.fonts
     sudo apt -y install font-manager
     sudo fc-cache -v -f
+    sudo chmod +x /opt/retropie/configs/all/autostart.sh
 else #there is no retropie so we need to add pixelcade /etc/rc.local instead
   echo "${yellow}Installing Fonts...${white}"
   cd $HOME/pixelcade
@@ -354,19 +363,11 @@ else
   sudo sed -i 's/raspberrypi/pixelcade/g' hosts
 fi
 
-echo " "
-while true; do
-    read -p "${magenta}Is the 1941 Game Logo Displaying on Pixelcade Now? (y/n)${white}" yn
-    case $yn in
-        [Yy]* ) echo "${green}INSTALLATION COMPLETE , please now reboot and then Pixelcade will be controlled by RetroPie${white}" && install_succesful=true; break;;
-        [Nn]* ) echo "${red}It may still be ok and try rebooting, you can also refer to https://pixelcade.org/download-pi/ for troubleshooting steps" && exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
+install_succesful=true
 
 if [ "$install_succesful" = true ] ; then
   while true; do
-      read -p "${magenta}Reboot Now? (y/n)${white}" yn
+      read -p "${magenta}You'll need to Reboot, ok to Reboot Now? (y/n)${white}" yn
       case $yn in
           [Yy]* ) sudo reboot; break;;
           [Nn]* ) echo "${yellow}Please reboot when you get a chance" && exit;;
