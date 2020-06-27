@@ -61,6 +61,7 @@ public class SerialPortIOIOConnectionBootstrap implements
         public static String ledResolution_=null;
         private static boolean settingsINIExists = false;
         public static LogMe logMe = null;
+        public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
 	@Override
 	public void getFactories(Collection<IOIOConnectionFactory> result) {
@@ -135,12 +136,24 @@ public class SerialPortIOIOConnectionBootstrap implements
 	static Collection<String> getExplicitPorts() {
             List<String> result = new LinkedList<String>();
             
-            //let's look in settings.ini for the port 
+               boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+               String pixelHome = "/home/pi/pixelcade/";
+                if (isWindows) {
+                  pixelHome = System.getProperty("user.dir") + "\\";  //user dir is the folder where pixelweb.jar lives and would be placed there by the windows installer
+                } else {       
+                  pixelHome = System.getProperty("user.home") + "/pixelcade/";  //let's force user.home since we don't have an installer for Pi or Mac
+       //          String path = Pixel.class.getProtectionDomain().getCodeSource().getLocation().getPath(); //get the path that pixelweb.jar is launched from 
+       //          String decodedPath = URLDecoder.decode(path, "UTF-8");
+       //          pixelHome = "/" + FilenameUtils.getPath(decodedPath) ;  //important won't work without the "/" in front
+                }
+
+             //let's look in settings.ini for the port 
              File file = new File("settings.ini");
              if (file.exists() && !file.isDirectory()) { 
                Ini ini = null;
                 try {
-                   ini = new Ini(new File(Pixel.getHomePath() + "settings.ini"));  //uses the ini4j lib
+                   //ini = new Ini(new File(Pixel.getHomePath() + "settings.ini"));  //uses the ini4j lib
+                   ini = new Ini(new File("settings.ini"));  //uses the ini4j lib
                 } catch (IOException ex) {
                    Logger.getLogger(SerialPortIOIOConnectionBootstrap.class.getName()).log(Level.SEVERE, null, ex);
                 }
