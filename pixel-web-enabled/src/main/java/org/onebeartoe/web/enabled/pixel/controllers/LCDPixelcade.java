@@ -103,6 +103,7 @@ public void setLCDFont(Font font, String fontFilename) {
     }
 
     static public void displayImage(String named, String system) throws IOException {
+        System.out.println(String.format("[INTERNAL] Asked to display marquee for %s, %s",named,system));
         if(!WebEnabledPixel.getLCDMarquee().contains("yes"))
             return;
 
@@ -111,6 +112,7 @@ public void setLCDFont(Font font, String fontFilename) {
             windowsLCD = new WindowsLCD();
             
             windowsLCD.displayImage(named, system);
+            System.out.println(String.format("[INTERNAL] Switching to WindowsSubsytem because IsWindows:%d",isWindows));
             return;
         }
 		
@@ -160,10 +162,10 @@ public void setLCDFont(Font font, String fontFilename) {
         if(doGif){
           theCommand = GIF_COMMAND.replace("${named}", named).replace("${system}", gifSystem);
         }
-
+        System.out.println(String.format("[INTERNAL] Running command: %s  For Marquee: %s",theCommand,named));
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("sh", "-c", RESET_COMMAND + theCommand);
-        System.out.println("Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
+        System.out.println("[INTERNAL] Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
         Process process = builder.start();
 	    
         if (named.contains("resetti") && doGif == false)
@@ -174,7 +176,7 @@ public void setLCDFont(Font font, String fontFilename) {
 
     static public void scrollText(String message, Font font, Color color, int speed) {
         if(isWindows){
-		System.out.println("Switching to WindowsSubsystem");
+		System.out.println("[INTERNAL]Scroller Switching to WindowsSubsystem");
             if(windowsLCD == null)
                 windowsLCD = new WindowsLCD();
 
