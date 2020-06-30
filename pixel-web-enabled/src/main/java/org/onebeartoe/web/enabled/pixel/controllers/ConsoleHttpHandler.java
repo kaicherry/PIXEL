@@ -203,7 +203,7 @@ public class ConsoleHttpHandler extends ImageResourceHttpHandler {
             color = WebEnabledPixel.getColorFromHexOrName(color_);
         } 
        
-      if (WebEnabledPixel.getLCDMarquee().equals("yes")) { 
+      if (WebEnabledPixel.getLCDMarquee().equals("yes") && !consoleNameMapped.equals("retropie") && !consoleNameMapped.equals("power")) { 
             String consoleLCDFilePathPNG = this.application.getPixel().getPixelHome() + "lcdmarquees/console" + "/" + "default-" + consoleNameMapped + ".png"; 
             System.out.println("Looking for console lcd marquee @: " + consoleLCDFilePathPNG);
             LogMe.aLogger.info("Looking for console lcd marquee @: " + consoleLCDFilePathPNG);
