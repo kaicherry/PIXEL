@@ -32,7 +32,7 @@ public class LCDPixelcade {
     public static String currentMessage = "Welcome and Game On!";
     public static String gifSystem = "";
     public static  WindowsLCD windowsLCD = null;
-    public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+    public static boolean isWindows = (System.getProperty("os.name").toLowerCase().startsWith("windows"));
     public static boolean  doGif = false;
     public static void main(String[] args) {
 

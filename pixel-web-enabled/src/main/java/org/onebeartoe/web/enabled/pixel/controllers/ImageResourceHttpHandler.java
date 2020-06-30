@@ -4,10 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import ioio.lib.api.exception.ConnectionLostException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -64,7 +61,8 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
         //logMe.aLogger.info("RAW PATHB: " + exchange.getRequestURI()); 
         //System.out.println("RAW PATHB: " + exchange.getRequestURI());
         //System.out.println("RAW PATHC: " + exchange.getLocalAddress());
-        
+
+
         
         try
         {
@@ -72,9 +70,15 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
             
             String path = requestURI.getPath();
             
+            URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.getResponseCode();
+            con.disconnect();
+
             int i = path.lastIndexOf("/") + 1;
             String name = path.substring(i);
-            
+
             if(name.equals(modeName))
             {
                 // this is just a request change to still image mode
