@@ -121,7 +121,7 @@ public class IOIOImpl implements IOIO, DisconnectListener {
 			initBoard();
 			Log.v(TAG, "Querying for required interface ID");
                         //logMe.aLogger.info("Querying for required interface ID");
-			//checkInterfaceVersion();
+			checkInterfaceVersion();
 			Log.v(TAG, "Required interface ID is supported");
                         //logMe.aLogger.info("Required interface ID is supported");
 			state_ = State.CONNECTED;

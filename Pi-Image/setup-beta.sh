@@ -197,7 +197,7 @@ sudo apt -y install git
 
 echo "${yellow}Installing Pixelcade from GitHub Repo...${white}"
 cd $HOME
-git clone -b dev https://github.com/alinke/pixelcade.git #using the dev branch for now
+git clone --depth=1 -b dev https://github.com/alinke/pixelcade.git #using the dev branch for now
 cd $HOME/pixelcade
 sudo chmod +x pixelweb
 git config user.email "sample@sample.com"
@@ -226,7 +226,7 @@ if [ "$lcd_marquee" = true ] ; then
   fi
   echo "${yellow}Downloading LCD Marquee artwork, this will take awhile...${white}"
   cd $HOME/pixelcade
-  git clone https://github.com/alinke/lcdmarquees.git
+  git clone --depth=1 https://github.com/alinke/lcdmarquees.git
   cd $HOME/pixelcade/lcdmarquees
   git config user.email "sample@sample.com"
   git config user.name "sample"
@@ -264,9 +264,9 @@ if [[ -d "/$HOME/.attract" ]]; then
   cd $HOME
   if [[ -d "$HOME/pixelcade-attract-mode" ]]; then
     sudo rm -r $HOME/pixelcade-attract-mode
-    git clone https://github.com/tnhabib/pixelcade-attract-mode.git
+    git clone --depth=1 https://github.com/tnhabib/pixelcade-attract-mode.git
   else
-    git clone https://github.com/tnhabib/pixelcade-attract-mode.git
+    git clone --depth=1 https://github.com/tnhabib/pixelcade-attract-mode.git
   fi
   sudo cp -r $HOME/pixelcade-attract-mode/Pixelcade $HOME/.attract/plugins
 else
