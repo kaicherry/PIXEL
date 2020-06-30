@@ -118,15 +118,16 @@ public void setLCDFont(Font font, String fontFilename) {
 		
 	String marqueePath = NOT_FOUND;
 
-        if (new File(String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system)).exists()){
-            //DEFAULT_COMMAND = "sudo fbi /home/pi/pixelcade/lcdmarquees/console/default-" + system + ".png -T 1  --noverbose --nocomments --fixwidth -a";
-            DEFAULT_COMMAND = wrapperHome + "gsho -platform linuxfb " + pixelHome + "lcdmarquees/console/default-" + system + ".png";
-            marqueePath = String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system);
-	} else if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
+        if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
             //DEFAULT_COMMAND = "sudo fbi" + pixelHome + "lcdmarquees/" + named + ".png -T 1 -/d /dev/fb0  --noverbose --nocomments --fixwidth -a";
             DEFAULT_COMMAND = wrapperHome + "gsho  -platform linuxfb " + pixelHome + "lcdmarquees/" + named + ".png";
             marqueePath = String.format("%slcdmarquees/%s.png",pixelHome, named);
-	}
+        }
+        if (new File(String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system)).exists()) {
+            //DEFAULT_COMMAND = "sudo fbi /home/pi/pixelcade/lcdmarquees/console/default-" + system + ".png -T 1  --noverbose --nocomments --fixwidth -a";
+            DEFAULT_COMMAND = wrapperHome + "gsho -platform linuxfb " + pixelHome + "lcdmarquees/console/default-" + system + ".png";
+            marqueePath = String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system);
+        }
 
         doGif = new File(String.format("%s%s/%s.gif",pixelHome, system,named)).exists();
         gifSystem = system;

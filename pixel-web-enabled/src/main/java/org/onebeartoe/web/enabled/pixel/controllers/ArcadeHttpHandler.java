@@ -41,14 +41,14 @@ public class ArcadeHttpHandler extends ImageResourceHttpHandler {
     LogMe logMe = LogMe.getInstance();
     Pixel pixel = this.application.getPixel();
     pixel.writeArcadeImage(arcadeFilePNGFullPath, saveAnimation, loop, consoleNameMapped, PNGNameWithExtension, WebEnabledPixel.pixelConnected);
-    lcdDisplay.displayImage(PNGNameWithExtension,consoleNameMapped);
+    //lcdDisplay.displayImage(PNGNameWithExtension,consoleNameMapped);
   }
   
   public void handleGIF(String consoleName, String arcadeName, Boolean saveAnimation, int loop) {
     Pixel pixel = this.application.getPixel();
-    try {
+   /* try {
         lcdDisplay.displayImage(arcadeName, consoleName);
-    } catch (IOException e){}
+    } catch (IOException e){} */
     try {
       pixel.writeArcadeAnimation(consoleName, arcadeName, saveAnimation.booleanValue(), loop, WebEnabledPixel.pixelConnected);
 
