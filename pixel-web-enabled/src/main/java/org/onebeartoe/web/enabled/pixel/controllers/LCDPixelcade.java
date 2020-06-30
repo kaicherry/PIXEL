@@ -122,9 +122,7 @@ public void setLCDFont(Font font, String fontFilename) {
             //DEFAULT_COMMAND = "sudo fbi /home/pi/pixelcade/lcdmarquees/console/default-" + system + ".png -T 1  --noverbose --nocomments --fixwidth -a";
             DEFAULT_COMMAND = wrapperHome + "gsho -platform linuxfb " + pixelHome + "lcdmarquees/console/default-" + system + ".png";
             marqueePath = String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system);
-	}
-
-        if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
+	} else if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
             //DEFAULT_COMMAND = "sudo fbi" + pixelHome + "lcdmarquees/" + named + ".png -T 1 -/d /dev/fb0  --noverbose --nocomments --fixwidth -a";
             DEFAULT_COMMAND = wrapperHome + "gsho  -platform linuxfb " + pixelHome + "lcdmarquees/" + named + ".png";
             marqueePath = String.format("%slcdmarquees/%s.png",pixelHome, named);
