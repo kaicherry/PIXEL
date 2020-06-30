@@ -217,9 +217,9 @@
         <compress>2</compress>
         <noHeaderFiles>true</noHeaderFiles>
         <noManPages>true</noManPages>
-	<launcher>PixelwebMac</launcher>
-        <jlinkImageName>pixelwebmac</jlinkImageName>
-        <jlinkZipName>pixelwebmac</jlinkZipName>
+	<launcher>PixelWeb</launcher>
+        <jlinkImageName>pixelweb</jlinkImageName>
+        <jlinkZipName>pixelweb</jlinkZipName>
 	<jmodsPath>${java.home}${file.separator}jmods</jmodsPath>
         </configuration>
     </plugin>
