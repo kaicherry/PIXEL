@@ -5,10 +5,9 @@ import com.sun.net.httpserver.HttpExchange;
 import java.awt.Color;
 import java.awt.Font;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
+import java.net.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,7 +64,15 @@ public class ScrollingTextHttpHander extends TextHttpHandler  //TO DO have TextH
         LogMe logMe = LogMe.getInstance();
         URI requestURI = exchange.getRequestURI();
         Font font = null;
-        
+
+        try {
+            System.out.println("Requested: " + requestURI.getPath());
+            URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.getResponseCode();
+            con.disconnect();
+        }catch(IOException e){}
         
          if (!CliPixel.getSilentMode()) {
              logMe.aLogger.info("Scrolling text handler received a request: " + requestURI);
