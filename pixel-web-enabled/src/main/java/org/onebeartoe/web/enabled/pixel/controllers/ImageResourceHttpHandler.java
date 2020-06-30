@@ -69,7 +69,7 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
             URI requestURI = exchange.getRequestURI();
             
             String path = requestURI.getPath();
-            
+            System.out.println("Requested: " + requestURI.getPath());
             URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
