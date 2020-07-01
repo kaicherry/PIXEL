@@ -38,7 +38,7 @@ public class ScrollingTextScrollSmoothHttpHandler extends TextHttpHandler
         String s = path.substring(i);
 
         try {
-            if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
+            if (InetAddress.getByName("pixelcadedx.local").isReachable(5000)){
 
                 System.out.println("Requested: " + requestURI.getPath());
                 URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());

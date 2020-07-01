@@ -36,9 +36,28 @@ public class LCDPixelcade {
     public static String gifSystem = "";
     public static  WindowsLCD windowsLCD = null;
     public static boolean dxEnvironment = false;
+    private boolean dxChecked = false;
     public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     public static boolean  doGif = false;
+
+    {
+        if (!dxChecked){
+            try {
+                if (InetAddress.getByName("pixelcadedx.local").isReachable(1000)) {
+                    dxEnvironment = true;
+                    dxChecked = true;
+                    System.out.print("Setting DXEnvironment\n");
+                } else {
+                    System.out.print("LCD used in non-DXE...YMMV/Ill-Advised :)\n");
+                    dxChecked = true;
+                }
+
+            } catch (Exception e) {
+            }
+    }
+    }
     public static void main(String[] args) {
+
 
         String shell = "bash";
         if(isWindows) {
@@ -46,16 +65,7 @@ public class LCDPixelcade {
             pixelHome =  WebEnabledPixel.getHome();
         }
 
-        try {
-            if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
-                dxEnvironment = true;
-                System.out.print("Setting DXEnvironment");
-            }else {
-                System.out.print("LCD used in non-DXE...YMMV/Ill-Advised :)");
-            }
 
-
-        }catch (  Exception e){}
    
         boolean haveFBI = new File(ENGINE_PATH).exists();
         //boolean haveExtraDisplay = new File("/dev/fb1").exists();
