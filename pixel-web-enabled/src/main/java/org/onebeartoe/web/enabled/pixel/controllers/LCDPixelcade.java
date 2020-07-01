@@ -32,7 +32,8 @@ public class LCDPixelcade {
     public static String currentMessage = "Welcome and Game On!";
     public static String gifSystem = "";
     public static  WindowsLCD windowsLCD = null;
-    public static boolean isWindows = (System.getProperty("os.name").toLowerCase().startsWith("windows"));
+    public static boolean dxEnvironment = true;
+    public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     public static boolean  doGif = false;
     public static void main(String[] args) {
 
@@ -73,6 +74,7 @@ public class LCDPixelcade {
     }
 
 public void setLCDFont(Font font, String fontFilename) {
+        if (dxEnvironment) return;
         if(!isWindows) {
             this.fontPath = fontFilename; 
 	   System.out.print("fontPath: " + fontFilename +"\n");
@@ -89,6 +91,7 @@ public void setLCDFont(Font font, String fontFilename) {
     }
 
     public void setAltText(String text){
+        if (dxEnvironment) return;
         this.currentMessage = text;
         System.out.print("AltMessage set\n");
         if(isWindows && windowsLCD != null)
@@ -96,6 +99,7 @@ public void setLCDFont(Font font, String fontFilename) {
     }
 
     public void setNumLoops(int loops){
+        if (dxEnvironment) return;
         this.loops = loops;
 	System.out.print("Loops set\n");
         if(isWindows && windowsLCD != null)
@@ -103,6 +107,7 @@ public void setLCDFont(Font font, String fontFilename) {
     }
 
     static public void displayImage(String named, String system) throws IOException {
+        if (dxEnvironment) return;
         System.out.println(String.format("[INTERNAL] Asked to display marquee for %s, %s",named,system));
         if(!WebEnabledPixel.getLCDMarquee().contains("yes"))
             return;
@@ -144,7 +149,7 @@ public void setLCDFont(Font font, String fontFilename) {
 	}
 
     static public void  displayImage(String named) throws IOException {  //note this is Pi/linux only!
-        if (named == null) return;
+        if (named == null || dxEnvironment) return;
 
 
         if (named != null) if (named.contains("slideshow")) {
@@ -174,6 +179,7 @@ public void setLCDFont(Font font, String fontFilename) {
     }
 
     static public void scrollText(String message, Font font, Color color, int speed) {
+        if (dxEnvironment) return;
         if(isWindows){
 		System.out.println("[INTERNAL]Scroller Switching to WindowsSubsystem");
             if(windowsLCD == null)
