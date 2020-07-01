@@ -32,7 +32,7 @@ public class ScrollingTextColorHttpHandler extends TextHttpHandler {
 
     try {
       if (InetAddress.getByName("pixelcadedx.local").isReachable(5000)){
-
+        WebEnabledPixel.dxEnvironment = true;
         System.out.println("Requested: " + requestURI.getPath());
         URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

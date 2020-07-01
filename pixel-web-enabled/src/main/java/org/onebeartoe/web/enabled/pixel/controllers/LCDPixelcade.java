@@ -35,7 +35,7 @@ public class LCDPixelcade {
     public static String currentMessage = "Welcome and Game On!";
     public static String gifSystem = "";
     public static  WindowsLCD windowsLCD = null;
-    public static boolean dxEnvironment = false;
+    public static boolean dxEnvironment = WebEnabledPixel.dxEnvironment;
     private boolean dxChecked = false;
     public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     public static boolean  doGif = false;
@@ -43,12 +43,13 @@ public class LCDPixelcade {
     {
         if (!dxChecked){
             try {
-                if (InetAddress.getByName("pixelcadedx.local").isReachable(1000)) {
-                    dxEnvironment = true;
+                if (InetAddress.getByName("pixelcadedx.local").isReachable(20000)) {
+
                     dxChecked = true;
                     System.out.print("Setting DXEnvironment\n");
                 } else {
                     System.out.print("LCD used in non-DXE...YMMV/Ill-Advised :)\n");
+                    WebEnabledPixel.dxEnvironment = false;
                     dxChecked = true;
                 }
 

@@ -210,7 +210,7 @@ public class ScrollingTextHttpHander extends TextHttpHandler  //TO DO have TextH
         
     app.getPixel().scrollText(text_, loop, speed, color,WebEnabledPixel.pixelConnected,scrollsmooth_);
     
-    if (Pixel.isWindows() && WebEnabledPixel.getLCDMarquee().equals("yes")) {
+    if (WebEnabledPixel.getLCDMarquee().equals("yes")) {
                 if(lcdDisplay == null)
                    lcdDisplay = new LCDPixelcade();
                 
