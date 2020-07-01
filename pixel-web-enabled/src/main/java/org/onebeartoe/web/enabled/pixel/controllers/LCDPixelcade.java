@@ -5,6 +5,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
 
 import org.onebeartoe.web.enabled.pixel.WebEnabledPixel;
 
@@ -32,7 +35,7 @@ public class LCDPixelcade {
     public static String currentMessage = "Welcome and Game On!";
     public static String gifSystem = "";
     public static  WindowsLCD windowsLCD = null;
-    public static boolean dxEnvironment = true;
+    public static boolean dxEnvironment = false;
     public static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     public static boolean  doGif = false;
     public static void main(String[] args) {
@@ -42,6 +45,17 @@ public class LCDPixelcade {
             windowsLCD = new WindowsLCD();
             pixelHome =  WebEnabledPixel.getHome();
         }
+
+        try {
+            if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
+                dxEnvironment = true;
+                System.out.print("Setting DXEnvironment");
+            }else {
+                System.out.print("LCD used in non-DXE...YMMV/Ill-Advised :)");
+            }
+
+
+        }catch (  Exception e){}
    
         boolean haveFBI = new File(ENGINE_PATH).exists();
         //boolean haveExtraDisplay = new File("/dev/fb1").exists();
