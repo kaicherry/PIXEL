@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import java.awt.Color;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 
@@ -30,13 +31,16 @@ public class ScrollingTextColorHttpHandler extends TextHttpHandler {
     Color color = Color.red;
 
     try {
-      System.out.println("Requested: " + requestURI.getPath());
-      URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
-      HttpURLConnection con = (HttpURLConnection) url.openConnection();
-      con.setRequestMethod("GET");
-      con.getResponseCode();
-      con.disconnect();
-    }catch(IOException e){}
+      if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
+
+        System.out.println("Requested: " + requestURI.getPath());
+        URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.getResponseCode();
+        con.disconnect();
+      }
+    }catch (  Exception e){}
     
     if (colorString != null)
       color = WebEnabledPixel.getColorFromHexOrName(colorString); 

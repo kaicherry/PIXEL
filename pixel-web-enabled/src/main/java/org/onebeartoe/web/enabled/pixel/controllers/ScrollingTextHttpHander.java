@@ -65,14 +65,6 @@ public class ScrollingTextHttpHander extends TextHttpHandler  //TO DO have TextH
         URI requestURI = exchange.getRequestURI();
         Font font = null;
 
-        try {
-            System.out.println("Requested: " + requestURI.getPath());
-            URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.getResponseCode();
-            con.disconnect();
-        }catch(IOException e){}
         
          if (!CliPixel.getSilentMode()) {
              logMe.aLogger.info("Scrolling text handler received a request: " + requestURI);

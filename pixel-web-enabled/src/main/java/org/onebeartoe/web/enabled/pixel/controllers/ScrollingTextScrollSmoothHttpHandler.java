@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 
@@ -37,13 +38,16 @@ public class ScrollingTextScrollSmoothHttpHandler extends TextHttpHandler
         String s = path.substring(i);
 
         try {
-            System.out.println("Requested: " + requestURI.getPath());
-            URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.getResponseCode();
-            con.disconnect();
-        }catch(IOException e){}
+            if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
+
+                System.out.println("Requested: " + requestURI.getPath());
+                URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.getResponseCode();
+                con.disconnect();
+            }
+        }catch (  Exception e){}
         
         int scrollsmooth = Integer.valueOf(s);
         
