@@ -62,21 +62,24 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
         //System.out.println("RAW PATHB: " + exchange.getRequestURI());
         //System.out.println("RAW PATHC: " + exchange.getLocalAddress());
 
-
-        
         try {
             URI requestURI = exchange.getRequestURI();
             String path = requestURI.getPath();
-            if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
-            System.out.println("Requested: " + requestURI.getPath());
-            URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.getResponseCode();
-            con.disconnect();
-            }
+
             int i = path.lastIndexOf("/") + 1;
             String name = path.substring(i);
+
+            try {
+                if (InetAddress.getByName("pixelcadedx.local").isReachable(2)){
+
+                    System.out.println("Requested: " + requestURI.getPath());
+                    URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");
+                    con.getResponseCode();
+                    con.disconnect();
+                }
+            }catch (  Exception e){}
 
             if(name.equals(modeName))
             {
