@@ -279,20 +279,33 @@ public class ArcadeHttpHandler extends ImageResourceHttpHandler {
         } 
       
       
-      if (WebEnabledPixel.getLCDMarquee().equals("yes")) { 
+      if (WebEnabledPixel.getLCDMarquee().equals("yes") && !consoleNameMapped.equals("retropie") && !consoleNameMapped.equals("power")) { 
             String arcadeLCDFilePathPNG = this.application.getPixel().getPixelHome() + "lcdmarquees" + "/" + arcadeNameOnly + ".png"; 
             System.out.println("Looking for lcd marquee @: " + arcadeLCDFilePathPNG);
             LogMe.aLogger.info("Looking for lcd marquee @: " + arcadeLCDFilePathPNG);
             File arcadeLCDFilePNG = new File(arcadeLCDFilePathPNG);  
             
+            String consoleLCDFilePathPNG = this.application.getPixel().getPixelHome() + "lcdmarquees/console" + "/" + "default-" + consoleNameMapped + ".png";
+            System.out.println("Looking for lcd console marquee @: " + consoleLCDFilePathPNG);
+            LogMe.aLogger.info("Looking for lcd console marquee @: " + consoleLCDFilePathPNG);
+            File consoleLCDFilePNG = new File(consoleLCDFilePathPNG);  
+            
             if (arcadeLCDFilePNG.exists()) {
-                 System.out.println("FOUND: " + arcadeLCDFilePathPNG);
+                System.out.println("FOUND: " + arcadeLCDFilePathPNG);
                 LogMe.aLogger.info("FOUND: " + arcadeLCDFilePathPNG);
                 if (this.lcdDisplay == null) {
                    this.lcdDisplay = new LCDPixelcade();
                 }  
                  lcdDisplay.displayImage(arcadeNameOnly, consoleNameMapped);
-            } else if (text_ != "") {  //if not matching png, do we have some scrolling text we can show?
+            } else if (consoleLCDFilePNG.exists()) {
+                System.out.println("FOUND: " + consoleLCDFilePathPNG);
+                LogMe.aLogger.info("FOUND: " + consoleLCDFilePathPNG);
+                if (this.lcdDisplay == null) {
+                   this.lcdDisplay = new LCDPixelcade();
+                }  
+                 lcdDisplay.displayImage(arcadeNameOnly, consoleNameMapped);
+            } 
+            else if (text_ != "") {  //if not matching png, do we have some scrolling text we can show?
                 lcdDisplay.setAltText(text_);	
                 lcdDisplay.setNumLoops(loop_);   
                 lcdDisplay.scrollText(text_, new Font(font_, Font.PLAIN, 288), color, 15);
@@ -301,6 +314,8 @@ public class ArcadeHttpHandler extends ImageResourceHttpHandler {
                 lcdDisplay.displayImage("pixelcade", consoleNameMapped);
                 System.out.println("went to generic image");
             }
+      } else {
+           System.out.println("SKIPPED");
       }
       
       if (streamOrWrite.equals("write")) {
