@@ -73,7 +73,7 @@ public abstract class ImageResourceHttpHandler extends TextHttpHandler
                 if (InetAddress.getByName("pixelcadedx.local").isReachable(5000)){
                     WebEnabledPixel.dxEnvironment = true;
                     System.out.println("Requested: " + requestURI.getPath());
-                    URL url = new URL("http://pixelcadedx.local:8080" + requestURI.getPath());
+                    URL url = new URL("http://pixelcadedx.local:8080" + requestURI);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("GET");
                     con.getResponseCode();
