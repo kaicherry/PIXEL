@@ -115,22 +115,22 @@ public void setLCDFont(Font font, String fontFilename) {
         }
 		
 	String marqueePath = NOT_FOUND;
+        String OVERRIDE = DEFAULT_COMMAND;
 
         if (new File(String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system)).exists()){
-            //DEFAULT_COMMAND = "sudo fbi /home/pi/pixelcade/lcdmarquees/console/default-" + system + ".png -T 1  --noverbose --nocomments --fixwidth -a";
-            DEFAULT_COMMAND = wrapperHome + "gsho -platform linuxfb " + pixelHome + "lcdmarquees/console/default-" + system + ".png";
+            OVERRIDE = wrapperHome + "gsho -platform linuxfb " + pixelHome + "lcdmarquees/console/default-" + system + ".png";
             marqueePath = String.format("/home/pi/pixelcade/lcdmarquees/console/default-%s.png", system);
 	}
 
         if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
             //DEFAULT_COMMAND = "sudo fbi" + pixelHome + "lcdmarquees/" + named + ".png -T 1 -/d /dev/fb0  --noverbose --nocomments --fixwidth -a";
-            DEFAULT_COMMAND = wrapperHome + "gsho  -platform linuxfb " + pixelHome + "lcdmarquees/" + named + ".png";
+            OVERRIDE = wrapperHome + "gsho  -platform linuxfb " + pixelHome + "lcdmarquees/" + named + ".png";
             marqueePath = String.format("%slcdmarquees/%s.png",pixelHome, named);
 	}
 
         doGif = new File(String.format("%s%s/%s.gif",pixelHome, system,named)).exists();
         gifSystem = system;
-	theCommand = DEFAULT_COMMAND;
+	theCommand = OVERRIDE;
     	
 	if(marqueePath.contains(NOT_FOUND)){
 	     System.out.print(String.format("[INTERNAL] Could not locate %s.png in %slcdmarquees\nmp:%s\nnf:%s\n",named, pixelHome,marqueePath,NOT_FOUND));
@@ -154,8 +154,7 @@ public void setLCDFont(Font font, String fontFilename) {
             theCommand = PNG_COMMAND.replace("${named}", named);
         } else if (new File(MARQUEE_PATH + named + ".jpg").exists()) {
             theCommand = JPG_COMMAND.replace("${named}", named);
-	} else if (named.contains("resetti")) 
-            theCommand = PNG_COMMAND.replace("${named}", "black");
+	}
 
         if(doGif){
           theCommand = GIF_COMMAND.replace("${named}", named).replace("${system}", gifSystem);
