@@ -135,7 +135,8 @@ public void setLCDFont(Font font, String fontFilename) {
         if(marqueePath.contains(NOT_FOUND)){
             System.out.print(String.format("[INTERNAL] Could not locate %s.png in %slcdmarquees\nmp:%s\nnf:%s\n",named, pixelHome,marqueePath,NOT_FOUND));
             //currentMessage = String.format("%s - %s",named,system);
-            named = "resetti";
+            named = "pixelcade";
+            System.out.println("[INTERNAL] Changed 'named' to: " + named +"\n");
         }
 
         displayImage(named);
@@ -145,6 +146,8 @@ public void setLCDFont(Font font, String fontFilename) {
     static public void  displayImage(String named) throws IOException {  //note this is Pi/linux only!
         if (named == null) return;
 
+        System.out.println("[INTERNAL] 'named' for displayImage is: " + named +"\n");
+        System.out.println("[INTERNAL] 'theCommand' is: " + theCommand +"\n");
 
         if (named != null) if (named.contains("slideshow")) {
             theCommand = SLIDESHOW;
@@ -165,8 +168,8 @@ public void setLCDFont(Font font, String fontFilename) {
         System.out.println("Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
         Process process = builder.start();
 
-        if (named.contains("resetti") && doGif == false)
-            scrollText(currentMessage,new Font("Helvetica", Font.PLAIN, 18), Color.red,15);
+        //if (named.contains("resetti") && doGif == false)
+         //   scrollText(currentMessage,new Font("Helvetica", Font.PLAIN, 18), Color.red,15);
 
         if(doGif) doGif = false;
     }
