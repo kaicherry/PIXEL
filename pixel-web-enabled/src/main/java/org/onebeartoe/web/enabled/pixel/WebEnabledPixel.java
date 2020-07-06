@@ -554,6 +554,7 @@ if (lcdMarquee_.equals("yes") && lcdDisplay != null) {
 
     if (lcdMarquee_.equals("yes")) {
       LCDPixelcade lcdDisplay = new LCDPixelcade();
+      lcdDisplay.setUp();
 	try {
           Font temp = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(pixelHome + "fonts/" + defaultFont + ".ttf"));
           lcdDisplay.setLCDFont(temp.deriveFont(244f),defaultFont + ".ttf");

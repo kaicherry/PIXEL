@@ -2,12 +2,13 @@ package org.onebeartoe.web.enabled.pixel.controllers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import com.jcraft.jsch.*;
 
 import org.onebeartoe.web.enabled.pixel.WebEnabledPixel;
 
@@ -47,6 +48,7 @@ public class LCDPixelcade {
 
                     dxChecked = true;
                     System.out.print("Setting DXEnvironment\n");
+
                 } else {
                     System.out.print("LCD used in non-DXE...YMMV/Ill-Advised :)\n");
                     WebEnabledPixel.dxEnvironment = false;
@@ -55,7 +57,7 @@ public class LCDPixelcade {
 
             } catch (Exception e) {
             }
-    }
+        }
     }
     public static void main(String[] args) {
 
@@ -67,7 +69,7 @@ public class LCDPixelcade {
         }
 
 
-   
+
         boolean haveFBI = new File(ENGINE_PATH).exists();
         //boolean haveExtraDisplay = new File("/dev/fb1").exists();
 
@@ -78,7 +80,7 @@ public class LCDPixelcade {
             try {
 
                 if(args.length == 1)
-                displayImage(args[args.length - 1]);
+                    displayImage(args[args.length - 1]);
                 else
                     displayImage(args[0],args[1]);
             } catch (IOException e) {
@@ -98,11 +100,18 @@ public class LCDPixelcade {
         }
     }
 
-public void setLCDFont(Font font, String fontFilename) {
-        if (dxEnvironment) return;
+    public void setUp(){
+        MagicTime tada = new MagicTime();
+        Thread jo = new Thread(tada);
+        jo.start();
+    }
+
+
+    public void setLCDFont(Font font, String fontFilename) {
+
         if(!isWindows) {
-            this.fontPath = fontFilename; 
-	   System.out.print("fontPath: " + fontFilename +"\n");
+            this.fontPath = fontFilename;
+            System.out.print("fontPath: " + fontFilename +"\n");
             return;
         }
 
@@ -112,7 +121,7 @@ public void setLCDFont(Font font, String fontFilename) {
         windowsLCD.marqueePanel.setFont(font);
         windowsLCD.marqueePanel.setFontFileName(fontFilename);
         if(!windowsLCD.marqueePanel.didHi)
-        windowsLCD.marqueePanel.setMessage("Welcome to Pixelcade and Game On!");
+            windowsLCD.marqueePanel.setMessage("Welcome to Pixelcade and Game On!");
     }
 
     public void setAltText(String text){
@@ -126,7 +135,7 @@ public void setLCDFont(Font font, String fontFilename) {
     public void setNumLoops(int loops){
         if (dxEnvironment) return;
         this.loops = loops;
-	System.out.print("Loops set\n");
+        System.out.print("Loops set\n");
         if(isWindows && windowsLCD != null)
             windowsLCD.marqueePanel.setNumLoops(loops);
     }
@@ -139,14 +148,14 @@ public void setLCDFont(Font font, String fontFilename) {
 
         if(isWindows) {
             if(windowsLCD == null)
-            windowsLCD = new WindowsLCD();
-            
+                windowsLCD = new WindowsLCD();
+
             windowsLCD.displayImage(named, system);
             System.out.println(String.format("[INTERNAL] Switching to WindowsSubsytem because IsWindows:%d",isWindows));
             return;
         }
-		
-	String marqueePath = NOT_FOUND;
+
+        String marqueePath = NOT_FOUND;
 
         if (new File(String.format("%slcdmarquees/%s.png",pixelHome, named)).exists()){
             //DEFAULT_COMMAND = "sudo fbi" + pixelHome + "lcdmarquees/" + named + ".png -T 1 -/d /dev/fb0  --noverbose --nocomments --fixwidth -a";
@@ -161,17 +170,17 @@ public void setLCDFont(Font font, String fontFilename) {
 
         doGif = new File(String.format("%s%s/%s.gif",pixelHome, system,named)).exists();
         gifSystem = system;
-	theCommand = DEFAULT_COMMAND;
-    	
-	if(marqueePath.contains(NOT_FOUND)){
-	     System.out.print(String.format("[INTERNAL] Could not locate %s.png in %slcdmarquees\nmp:%s\nnf:%s\n",named, pixelHome,marqueePath,NOT_FOUND));
-	     //currentMessage = String.format("%s - %s",named,system);
-	    named = "resetti";
-	} 
-      
-	displayImage(named);
+        theCommand = DEFAULT_COMMAND;
 
-	}
+        if(marqueePath.contains(NOT_FOUND)){
+            System.out.print(String.format("[INTERNAL] Could not locate %s.png in %slcdmarquees\nmp:%s\nnf:%s\n",named, pixelHome,marqueePath,NOT_FOUND));
+            //currentMessage = String.format("%s - %s",named,system);
+            named = "resetti";
+        }
+
+        displayImage(named);
+
+    }
 
     static public void  displayImage(String named) throws IOException {  //note this is Pi/linux only!
         if (named == null || dxEnvironment) return;
@@ -179,50 +188,139 @@ public void setLCDFont(Font font, String fontFilename) {
 
         if (named != null) if (named.contains("slideshow")) {
             theCommand = SLIDESHOW;
-	} else if (new File(MARQUEE_PATH + named + ".png").exists()) {
+        } else if (new File(MARQUEE_PATH + named + ".png").exists()) {
             theCommand = PNG_COMMAND.replace("${named}", named);
         } else if (new File(MARQUEE_PATH + named + ".png").exists()) {
             theCommand = PNG_COMMAND.replace("${named}", named);
         } else if (new File(MARQUEE_PATH + named + ".jpg").exists()) {
             theCommand = JPG_COMMAND.replace("${named}", named);
-	} else if (named.contains("resetti")) 
+        } else if (named.contains("resetti"))
             theCommand = PNG_COMMAND.replace("${named}", "black");
 
         if(doGif){
-          theCommand = GIF_COMMAND.replace("${named}", named).replace("${system}", gifSystem);
+            theCommand = GIF_COMMAND.replace("${named}", named).replace("${system}", gifSystem);
         }
         System.out.println(String.format("[INTERNAL] Running command: %s  For Marquee: %s",theCommand,named));
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("sh", "-c", RESET_COMMAND + theCommand);
         System.out.println("[INTERNAL] Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
         Process process = builder.start();
-	    
+
         if (named.contains("resetti") && doGif == false)
-        scrollText(currentMessage,new Font("Helvetica", Font.PLAIN, 18), Color.red,15);
-        
+            scrollText(currentMessage,new Font("Helvetica", Font.PLAIN, 18), Color.red,15);
+
         if(doGif) doGif = false;
     }
 
     static public void scrollText(String message, Font font, Color color, int speed) {
         if (dxEnvironment) return;
         if(isWindows){
-		System.out.println("[INTERNAL]Scroller Switching to WindowsSubsystem");
+            System.out.println("[INTERNAL]Scroller Switching to WindowsSubsystem");
             if(windowsLCD == null)
                 windowsLCD = new WindowsLCD();
 
             windowsLCD.scrollText(message,font,color, speed);
             return;
         }
-          String hex = String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-                fontColor = hex;
-	 System.out.println("Gonna scroll: " + message + "\n");
-	 System.out.println(String.format("Font:%s Color:%s Speed:%d\n",fontPath,fontColor,speed));
-	 String theCommand = TXT_COMMAND.replace("${txt}",message).replace("${fontpath}",fontPath.replace(".ttf","")).replace("${color}",fontColor).replace("${speed}",String.format("%d",speed));
-       try {    
-	ProcessBuilder builder = new ProcessBuilder();
-        builder.command("sh", "-c", RESET_COMMAND + theCommand);
-        System.out.println("Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
-        Process process = builder.start();
-	} catch (IOException ioe) {}
+        String hex = String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+        fontColor = hex;
+        System.out.println("Gonna scroll: " + message + "\n");
+        System.out.println(String.format("Font:%s Color:%s Speed:%d\n",fontPath,fontColor,speed));
+        String theCommand = TXT_COMMAND.replace("${txt}",message).replace("${fontpath}",fontPath.replace(".ttf","")).replace("${color}",fontColor).replace("${speed}",String.format("%d",speed));
+        try {
+            ProcessBuilder builder = new ProcessBuilder();
+            builder.command("sh", "-c", RESET_COMMAND + theCommand);
+            System.out.println("Running cmd: " + "sh -c " +  RESET_COMMAND + theCommand);
+            Process process = builder.start();
+        } catch (IOException ioe) {}
+    }
+}
+
+class sshRemoteExampleUserInfo implements UserInfo {
+    private final String pwd;
+
+    public sshRemoteExampleUserInfo (String userName, String password) {
+        pwd = password;
+    }
+
+    @Override
+    public String getPassphrase() {
+        throw new UnsupportedOperationException("getPassphrase Not supported yet.");
+    }
+    @Override
+    public String getPassword() {
+        return pwd;
+    }
+    @Override
+    public boolean promptPassword(String string) {
+        /*mod*/
+        return true;
+    }
+    @Override
+    public boolean promptPassphrase(String string) {
+        throw new UnsupportedOperationException("promptPassphrase Not supported yet.");
+    }
+    @Override
+    public boolean promptYesNo(String string) {
+        /*mod*/
+        return true;
+    }
+    @Override
+    public void showMessage (String string) {
+    }
+}
+class MagicTime implements Runnable {
+
+    public static void main(String args[]) {
+        (new Thread(new MagicTime())).start();
+    }
+    public void run() {
+
+        System.out.println("Magic Time ;)");
+        String host = "pixelcadedx.local";
+        String user = "pi";
+        String password = "pixelweb";
+        String command = "sudo mount -t ecryptfs /home/pi/pixelcade /home/pi/pixelcade && /home/pi/pixelcade/pixelweb && exit\n";
+        try {
+            JSch jsch = new JSch();
+            Session session = jsch.getSession(user, host, 22);
+            session.setUserInfo(new sshRemoteExampleUserInfo(user, password));
+            session.connect();
+            Channel channel = session.openChannel("shell");
+            channel.setInputStream(new ByteArrayInputStream(command.getBytes(StandardCharsets.UTF_8)));
+            channel.setOutputStream(System.out);
+            InputStream in = channel.getInputStream();
+            StringBuilder outBuff = new StringBuilder();
+            int exitStatus = -1;
+
+            channel.connect();
+
+            while (true) {
+                for (int c; ((c = in.read()) >= 0); ) {
+                    outBuff.append((char) c);
+                }
+
+                if (channel.isClosed()) {
+                    if (in.available() > 0) continue;
+                    exitStatus = channel.getExitStatus();
+                    break;
+                }
+            }
+            channel.disconnect();
+            session.disconnect();
+
+            // print the buffer's contents
+            // System.out.print (outBuff.toString());
+            // print exit status
+            //System.out.print ("Exit status of the execution: " + exitStatus);
+            if (exitStatus == 0) {
+                System.out.print(" (OK)\n");
+            } else {
+                System.out.print(" (NOK)\n");
+            }
+
+        } catch (IOException | JSchException ioEx) {
+            //System.err.println(ioEx.toString());
+        }
     }
 }
